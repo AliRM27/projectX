@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const buyerSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -20,6 +20,6 @@ const buyerSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Buyer = mongoose.model("Buyer", buyerSchema);
+const Buyer = mongoose.model("User", userSchema);
 
 export default Buyer;
