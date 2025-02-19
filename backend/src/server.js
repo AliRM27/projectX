@@ -12,8 +12,8 @@ const app = e();
 app.use(json());
 app.use(cors());
 
-//register
-app.use("/", router);
+//auth
+app.use("/auth", router);
 
 app.listen(PORT, (err) => {
   if (err) {
