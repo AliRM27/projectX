@@ -14,6 +14,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    discount: {
+      type: Number,
+      required: true,
+    },
     quantity: {
       type: Number,
       required: true,
@@ -28,7 +32,7 @@ const productSchema = new mongoose.Schema(
     },
     seller: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Seller", // Reference to the seller who added the product
+      ref: "Shop", // Reference to the seller who added the product
       required: true,
     },
   },

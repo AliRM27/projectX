@@ -10,13 +10,7 @@ import {
 const router = express.Router();
 
 router.post("/register", registerValidations, handleValidationErrors, register);
-router.post(
-  "/login",
-  loginValidations,
-  handleValidationErrors,
-  checkAuth,
-  login
-);
-router.get("/me", checkAuth, getMe);
+router.post("/login", loginValidations, handleValidationErrors, login);
+router.get("/profile", checkAuth, getMe);
 
 export default router;

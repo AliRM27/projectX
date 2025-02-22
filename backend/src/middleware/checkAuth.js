@@ -11,12 +11,12 @@ export default (req, res, next) => {
       next();
     } catch (err) {
       return res.status(403).json({
-        message: "No access.",
+        message: "Invalid token, access denied.",
       });
     }
   } else {
     return res.status(403).json({
-      message: "No access, token missing.",
+      message: "Access denied, token missing.",
     });
   }
 };
