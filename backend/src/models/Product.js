@@ -10,11 +10,11 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
+    oldPrice: {
       type: Number,
       required: true,
     },
-    discount: {
+    newPrice: {
       type: Number,
       required: true,
     },
@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema(
       type: String, // URL or file path for the image
       required: true,
     },
-    seller: {
+    sellerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop", // Reference to the seller who added the product
       required: true,

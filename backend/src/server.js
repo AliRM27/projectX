@@ -5,6 +5,7 @@ import authRouter from "./routes/authRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import homeRouter from "./routes/homeRoutes.js";
 import shopRouter from "./routes/shopRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
 import cors from "cors";
 d.config();
 connectDB();
@@ -15,6 +16,7 @@ const app = e();
 app.use(json());
 app.use(cors());
 
+//Mobile App
 //home
 app.use("/", homeRouter);
 //auth
@@ -23,6 +25,8 @@ app.use("/auth", authRouter);
 app.use("/products", productRouter);
 //shops
 app.use("/shops", shopRouter);
+//Cart
+app.use("/cart", cartRouter);
 
 app.listen(PORT, (err) => {
   if (err) {

@@ -15,11 +15,25 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    order: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Order",
-    },
-    // Additional fields like favorites, purchase history, etc. can be added
+    // Orders/Purchase history
+    orders: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+        purchaseDate: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+    // Additional fields like favorites, etc. can be added
   },
   { timestamps: true }
 );

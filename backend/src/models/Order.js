@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    buyer: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    products: [
+    items: [
       {
-        product: {
+        productId: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Product",
           required: true,
@@ -26,8 +26,8 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "completed", "canceled"],
-      default: "pending",
+      enum: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"],
+      default: "Pending",
     },
     pickupLocation: {
       type: String, // The location where the buyer will pick up the product
