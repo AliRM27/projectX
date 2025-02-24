@@ -30,9 +30,9 @@ const productSchema = new mongoose.Schema(
       type: String, // URL or file path for the image
       required: true,
     },
-    sellerId: {
+    shopId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Shop", // Reference to the seller who added the product
+      ref: "Shop", // Reference to the shop who added the product
       required: true,
     },
   },

@@ -6,6 +6,7 @@ import productRouter from "./routes/productRoutes.js";
 import homeRouter from "./routes/homeRoutes.js";
 import shopRouter from "./routes/shopRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
+import orderRouter from "./routes/orderRoutes.js";
 import cors from "cors";
 d.config();
 connectDB();
@@ -27,6 +28,8 @@ app.use("/products", productRouter);
 app.use("/shops", shopRouter);
 //Cart
 app.use("/cart", cartRouter);
+//Orders
+app.use("/", orderRouter);
 
 app.listen(PORT, (err) => {
   if (err) {

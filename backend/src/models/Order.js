@@ -7,6 +7,11 @@ const orderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    shop: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Shop",
+      required: true,
+    },
     items: [
       {
         productId: {
@@ -20,7 +25,7 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
-    totalAmount: {
+    totalPrice: {
       type: Number,
       required: true,
     },
@@ -29,8 +34,9 @@ const orderSchema = new mongoose.Schema(
       enum: ["Pending", "Confirmed", "Shipped", "Delivered", "Cancelled"],
       default: "Pending",
     },
-    pickupLocation: {
+    pickUpLocation: {
       type: String, // The location where the buyer will pick up the product
+      required: true,
     },
   },
   { timestamps: true }
