@@ -28,7 +28,7 @@ app.use("/products", productRouter);
 app.use("/shops", shopRouter);
 //Cart
 app.use("/cart", cartRouter);
-//Orders
+//Orders and Checkout
 app.use("/", orderRouter);
 
 app.listen(PORT, (err) => {

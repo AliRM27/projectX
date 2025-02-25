@@ -5,10 +5,9 @@ import Product from "../models/Product.js";
 // 📌 Checkout (Create Order)
 export const checkout = async (req, res) => {
   try {
-    const userId = req.userId; // Cart contains product IDs & quantity
+    const userId = req.userId;
     const cart = await Cart.findOne({ user: userId });
-
-    if (!cart || cart.length === 0) {
+    if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: "Cart is empty" });
     }
 
@@ -17,12 +16,13 @@ export const checkout = async (req, res) => {
     const products = await Product.find({ _id: { $in: productIds } }).populate(
       "shopId"
     );
+
     // Step 2: Group products by shop
-    const ordersByShop = {};
+    const groupedOrders = {};
     products.forEach((product) => {
-      const shopId = product.shopId._id.toString();
-      if (!ordersByShop[shopId]) {
-        ordersByShop[shopId] = {
+      const shopId = product.shopId._id;
+      if (!groupedOrders[shopId]) {
+        groupedOrders[shopId] = {
           shopId,
           pickUpLocation: product.shopId.location,
           items: [],
@@ -30,43 +30,45 @@ export const checkout = async (req, res) => {
         };
       }
 
-      // Find the matching cart item for this product
+      // Find the matching cart item
       const cartItem = cart.items.find(
         (item) => item.product.toString() === product._id.toString()
       );
       if (cartItem) {
-        ordersByShop[shopId].items.push({
-          productId: product._id,
+        groupedOrders[shopId].items.push({
+          product: product._id,
           quantity: cartItem.quantity,
         });
-        ordersByShop[shopId].totalPrice += product.newPrice * cartItem.quantity;
+        groupedOrders[shopId].totalPrice +=
+          product.newPrice * cartItem.quantity;
       }
     });
 
-    // Step 3: Create separate orders for each shop
-    const createdOrders = [];
-    for (const shopId in ordersByShop) {
-      const orderData = ordersByShop[shopId];
-      const newOrder = new Order({
-        user: userId,
-        shop: orderData.shopId,
-        pickUpLocation: orderData.pickUpLocation,
-        items: orderData.items,
-        totalPrice: orderData.totalPrice,
-        status: "Pending",
-      });
+    // Step 3: Create a single Parent Order
+    const subOrders = Object.values(groupedOrders); // Convert grouped data into an array
 
-      await newOrder.save();
-      createdOrders.push(newOrder);
-    }
-
-    res.status(201).json({
-      message: "Orders created successfully",
-      orders: createdOrders,
+    const mainOrder = new Order({
+      user: userId,
+      subOrders, // Stores each shop’s order details
+      totalPrice: subOrders.reduce(
+        (total, order) => total + order.totalPrice,
+        0
+      ),
+      status: "Pending",
     });
+
+    await mainOrder.save();
+
+    cart.items = [];
+    cart.totalPrice = 0;
+    await cart.save();
+
+    res
+      .status(201)
+      .json({ message: "Order created successfully", order: mainOrder });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error creating orders" });
+    res.status(500).json({ message: "Error creating order" });
   }
 };
 
@@ -75,7 +77,7 @@ export const getOrders = async (req, res) => {
   try {
     const userId = req.userId;
     const orders = await Order.find({ user: userId }).populate(
-      "items.productId"
+      "subOrders.items"
     );
 
     res.status(200).json(orders);
@@ -88,7 +90,7 @@ export const getOrders = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const order = await Order.findById(orderId).populate("items.productId");
+    const order = await Order.findById(orderId).populate("subOrders.items");
 
     if (!order) return res.status(404).json({ message: "Order not found" });
 
