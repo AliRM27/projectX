@@ -1,6 +1,7 @@
 import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 
 // 📌 Checkout (Create Order)
 export const checkout = async (req, res) => {
@@ -59,9 +60,16 @@ export const checkout = async (req, res) => {
 
     await mainOrder.save();
 
+    // Step 4: Clear the cart
+
     cart.items = [];
     cart.totalPrice = 0;
     await cart.save();
+
+    // Step 5: Save the order in User’s order history
+    const user = await User.findById({ _id: userId });
+    user.orders.push({ orderId: mainOrder._id, purchasedDate: Date.now() });
+    await user.save();
 
     res
       .status(201)
@@ -90,7 +98,10 @@ export const getOrders = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const order = await Order.findById(orderId).populate("subOrders.items");
+    const userId = req.userId;
+    const order = await Order.findOne({ _id: orderId, user: userId }).populate(
+      "subOrders.items"
+    );
 
     if (!order) return res.status(404).json({ message: "Order not found" });
 
@@ -104,7 +115,8 @@ export const getOrderById = async (req, res) => {
 export const cancelOrder = async (req, res) => {
   try {
     const { orderId } = req.params;
-    const order = await Order.findById(orderId);
+    const userId = req.userId;
+    const order = await Order.findOne({ _id: orderId, user: userId });
 
     if (!order) return res.status(404).json({ message: "Order not found" });
 
