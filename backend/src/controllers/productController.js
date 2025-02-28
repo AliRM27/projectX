@@ -3,7 +3,14 @@ import Product from "../models/Product.js";
 // Get all discounted products
 export const getAllProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { category } = req.query;
+    let products;
+
+    if (!category) {
+      products = await Product.find();
+    } else {
+      products = await Product.find({ category });
+    }
 
     if (products.length === 0) {
       return res.status(404).json({ message: "No products available." });

@@ -2,6 +2,7 @@ import d from "dotenv";
 import e, { json } from "express";
 import connectDB from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
+import profileRouter from "./routes/profileRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import homeRouter from "./routes/homeRoutes.js";
 import shopRouter from "./routes/shopRoutes.js";
@@ -22,6 +23,8 @@ app.use(cors());
 app.use("/", homeRouter);
 //auth
 app.use("/auth", authRouter);
+//profile
+app.use("/profile", profileRouter);
 //products
 app.use("/products", productRouter);
 //shops

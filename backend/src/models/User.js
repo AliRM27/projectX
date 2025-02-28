@@ -29,7 +29,15 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    // Additional fields like favorites, etc. can be added
+    wishList: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

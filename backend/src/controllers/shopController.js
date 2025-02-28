@@ -2,7 +2,14 @@ import Shop from "../models/Shop.js";
 
 export const getAllShops = async (req, res) => {
   try {
-    const shops = await Shop.find();
+    const { name } = req.query;
+    let shops;
+
+    if (!name) {
+      shops = await Shop.find();
+    } else {
+      shops = await Shop.find({ name });
+    }
 
     if (shops.length === 0) {
       return res.status(404).json({ message: "No shops available." });
