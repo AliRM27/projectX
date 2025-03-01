@@ -9,8 +9,8 @@ import checkAuth from "../middleware/checkAuth.js";
 
 const router = express.Router();
 
-router.post("/add", checkAuth, addToCart);
 router.get("/", checkAuth, getCart);
+router.post("/add", checkAuth, addToCart);
 router.put("/update/:productId", checkAuth, updateCart);
 router.delete("/remove/:productId", checkAuth, removeFromCart);
 
