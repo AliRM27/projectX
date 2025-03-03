@@ -1,5 +1,5 @@
-import d from "dotenv";
-import e, { json } from "express";
+import dotenv from "dotenv";
+import express from "express";
 import connectDB from "./config/db.js";
 import authRouter from "./routes/authRoutes.js";
 import profileRouter from "./routes/profileRoutes.js";
@@ -10,14 +10,15 @@ import shopRouter from "./routes/shopRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
 import cors from "cors";
-d.config();
+
+dotenv.config();
 connectDB();
 
 const PORT = process.env.PORT || 4444;
-const app = e();
+const app = express();
 
-app.use(json());
 app.use(cors());
+app.use(express.json());
 
 //Mobile App
 //entry point
@@ -43,7 +44,7 @@ app.use("/orders", orderRouter);
 
 app.listen(PORT, (err) => {
   if (err) {
-    return console.log(err);
+    return console.error(err);
   }
   console.log(`Server running on port ${PORT}`);
 });
