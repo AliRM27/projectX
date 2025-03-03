@@ -54,14 +54,18 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" }); // 1 hour expiry for access token
-    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" }); // 30 days expiry for refresh token
+    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    }); // 1 hour expiry for access token
+    const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    }); // 30 days expiry for refresh token
 
     res.status(200).json({
       message: "Login successful",
       user: { id: user._id, fullName: user.fullName, email: user.email },
       accessToken,
-      refreshToken
+      refreshToken,
     });
   } catch (error) {
     res.status(500).json({ message: "Login failed", error: error.message });
@@ -86,12 +90,18 @@ export const refreshToken = async (req, res) => {
       }
 
       // Create a new access token if the refresh token is valid
-      const newAccessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+      const newAccessToken = jwt.sign(
+        { id: user._id },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
 
       // Respond with the new access token
       res.status(200).json({ accessToken: newAccessToken });
     });
   } catch (error) {
-    res.status(500).json({ message: "Failed to refresh token", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to refresh token", error: error.message });
   }
 };
