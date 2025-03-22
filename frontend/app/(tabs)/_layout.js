@@ -1,11 +1,5 @@
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";
-import {
-  Ionicons,
-  MaterialIcons,
-  Feather,
-  AntDesign,
-} from "@expo/vector-icons";
 
 import HomeIcon from "../../assets/home.svg";
 import HomeActiveIcon from "../../assets/home-2.svg";
@@ -34,7 +28,6 @@ export default function TabsLayout() {
         options={{
           title: "Home",
           tabBarIcon: ({ focused }) =>
-            // <AntDesign name="home" size={size} color={color} />
             focused ? <HomeIcon /> : <HomeActiveIcon />,
         }}
       />
