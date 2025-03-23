@@ -1,14 +1,18 @@
-import { View, Text, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+} from "react-native";
+import { Link } from "expo-router";
 import React, { useState, useEffect } from "react";
 import { fetchHome } from "../../services/api.js";
 
 export default function index() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    loadData();
-  }, []);
+  const [refreshing, setRefreshing] = useState(false);
 
   const loadData = async () => {
     try {
@@ -20,6 +24,17 @@ export default function index() {
       setLoading(false);
     }
   };
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    loadData();
+    setRefreshing(false);
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
   return (
     <View
       style={{
@@ -29,6 +44,7 @@ export default function index() {
         backgroundColor: "white",
         borderWidth: 1,
         borderColor: "black",
+        width: "100%",
       }}
     >
       <View>
@@ -37,17 +53,48 @@ export default function index() {
       <View>
         <Text>Toggle</Text>
       </View>
-      <View>
-        {loading ? (
-          <ActivityIndicator size="large" color="black" />
-        ) : (
-          <View>
-            {data.map((obj, index) => {
-              return <Text key={index}>{obj.name}</Text>;
-            })}
-          </View>
-        )}
-      </View>
+      {loading ? (
+        <ActivityIndicator size="large" color="black" />
+      ) : (
+        <FlatList
+          style={{ width: "100%" }}
+          contentContainerStyle={styles.list}
+          data={data}
+          renderItem={({ item }) => (
+            <View style={styles.product}>
+              <Text>{item.name}</Text>
+              <Text>{item.newPrice}</Text>
+              <Link href={"../product/" + item._id}>View</Link>
+            </View>
+          )}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+        />
+      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  list: {
+    width: "100%",
+    height: "100%",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    backgroundColor: "white",
+    borderWidth: 0,
+    borderColor: "black",
+  },
+  product: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "white",
+    borderWidth: 1,
+    borderColor: "black",
+    width: 150,
+    height: 200,
+    margin: 10,
+    borderRadius: 10,
+  },
+});

@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const API_URL = "http://192.168.68.104:4444/";
+const API_URL = "http://192.168.178.46:4444/";
 
 const api = axios.create({
   baseURL: API_URL,
-  timeout: 10000,
+  timeout: 2000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -12,6 +12,15 @@ const api = axios.create({
 export const fetchHome = async () => {
   try {
     const response = await api.get(API_URL + "home?view=products");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchProduct = async (id) => {
+  try {
+    const response = await api.get(API_URL + "products/" + id);
     return response.data;
   } catch (error) {
     console.error(error);
