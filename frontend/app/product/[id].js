@@ -1,12 +1,23 @@
 import { View, Text, Button, ActivityIndicator, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import { fetchProduct } from "../../services/api.js";
+import { fetchProduct, addToCart } from "../../services/api.js";
 
 const product = () => {
   const { id } = useLocalSearchParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+
+  const add = async () => {
+    setLoading(true);
+    try {
+      await addToCart(id, 1);
+    } catch (error) {
+      console.error("Failed to add to cart");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -42,7 +53,7 @@ const product = () => {
           <Text>{data.description}</Text>
           <Text>{data.oldPrice}</Text>
           <Text>{data.newPrice}</Text>
-          <Button title="Add to Cart" />
+          <Button title="Add to Cart" onPress={add} />
         </View>
       )}
     </View>

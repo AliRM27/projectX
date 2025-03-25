@@ -10,12 +10,12 @@ export const addToCart = async (req, res) => {
     let cart = await Cart.findOne({ user: userId });
 
     if (!cart) {
-      cart = new Cart({ user: userId, items: [] });
+      return res.status(401).json({ message: "Cart not found" });
     }
 
     const product = await Product.findById(productId);
     if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+      return res.status(402).json({ message: "Product not found" });
     }
 
     const itemIndex = cart.items.findIndex(
@@ -52,7 +52,7 @@ export const getCart = async (req, res) => {
     const cart = await Cart.findOne({ user: userId }).populate("items.product");
 
     if (!cart) {
-      return res.status(404).json({ message: "Cart is empty" });
+      return res.status(408).json({ message: "Cart is empty" });
     }
 
     res.status(200).json(cart);

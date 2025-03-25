@@ -8,6 +8,6 @@ import checkAuth from "../middleware/checkAuth.js";
 const router = express.Router();
 
 router.get("/", checkAuth, getAllProducts);
-router.get("/:id", getProductDetails);
+router.get("/:id", checkAuth, getProductDetails);
 
 export default router;

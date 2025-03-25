@@ -60,6 +60,7 @@ export default function index() {
           style={{ width: "100%" }}
           contentContainerStyle={styles.list}
           data={data}
+          numColumns={2}
           renderItem={({ item }) => (
             <View style={styles.product}>
               <Text>{item.name}</Text>
@@ -77,11 +78,9 @@ export default function index() {
 
 const styles = StyleSheet.create({
   list: {
-    width: "100%",
-    height: "100%",
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: "column",
     justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "white",
     borderWidth: 0,
     borderColor: "black",

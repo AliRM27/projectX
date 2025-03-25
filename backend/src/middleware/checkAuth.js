@@ -15,11 +15,13 @@ export default (req, res, next) => {
     req.userId = decoded.id;
     next();
   } catch (err) {
-      if (err.name === 'TokenExpiredError') {
-        return res.status(401).json({ message: 'Token expired, please login again' });
-      }
-      return res.status(403).json({
-        message: "Invalid token, access denied.",
-      });
+    if (err.name === "TokenExpiredError") {
+      return res
+        .status(401)
+        .json({ message: "Token expired, please login again" });
+    }
+    return res.status(403).json({
+      message: "Invalid token, access denied.",
+    });
   }
 };

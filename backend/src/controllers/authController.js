@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import Cart from "../models/Cart.js";
 
 export const register = async (req, res) => {
   try {
@@ -9,7 +10,7 @@ export const register = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(403).json({ message: "User already exists" });
     }
 
     // Hash the password
@@ -23,6 +24,10 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
 
+    // Create a cart for the user
+    const newCart = new Cart({ user: newUser._id, items: [], totalPrice: 0 });
+
+    await newCart.save();
     await newUser.save();
 
     res.status(201).json({
