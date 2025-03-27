@@ -1,10 +1,20 @@
-import { View, Text, ActivityIndicator } from "react-native";
-import React, { useEffect, useState } from "react";
+import { View, Text, ActivityIndicator, Button } from "react-native";
+import React, { useState, useCallback } from "react";
 import { fetchUser } from "../../services/api.js";
+import { useFocusEffect } from "expo-router";
+import { logoutUser } from "../../services/authApi.js";
 
 export default function profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const logOut = async () => {
+    try {
+      await logoutUser();
+    } catch (error) {
+      console.error("Failed to logout");
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -17,9 +27,11 @@ export default function profile() {
     }
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   return (
     <View
@@ -36,6 +48,7 @@ export default function profile() {
         <View>
           <Text>{user.fullName}</Text>
           <Text>{user.email}</Text>
+          <Button title="Logout" onPress={logOut} />
         </View>
       )}
     </View>

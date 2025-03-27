@@ -76,11 +76,10 @@ const RegisterScreen = () => {
           <Text style={styles.buttonText}>Register</Text>
         )}
       </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Link href="/login" style={{ textAlign: "center", marginTop: 20 }}>
+      <TouchableOpacity onPress={() => router.replace("/login")}>
+        <Text style={{ textAlign: "center", marginTop: 20 }}>
           Already have an account? Login
-        </Link>
+        </Text>
       </TouchableOpacity>
     </View>
   );

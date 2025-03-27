@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { loginUser } from "../../services/authApi.js"; // Import login function
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 const LoginScreen = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -66,11 +66,10 @@ const LoginScreen = () => {
           <Text style={styles.buttonText}>Login</Text>
         )}
       </TouchableOpacity>
-
-      <TouchableOpacity>
-        <Link href="/register" style={styles.linkText}>
-          Don't have an account? Register
-        </Link>
+      <TouchableOpacity onPress={() => router.replace("register")}>
+        <Text style={{ textAlign: "center", marginTop: 20 }}>
+          Dont have an account? Register
+        </Text>
       </TouchableOpacity>
     </View>
   );

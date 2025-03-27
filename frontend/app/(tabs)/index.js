@@ -5,8 +5,8 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import { Link } from "expo-router";
-import React, { useState, useEffect } from "react";
+import { Link, useFocusEffect } from "expo-router";
+import React, { useState, useEffect, useCallback } from "react";
 import { fetchHome } from "../../services/api.js";
 
 export default function index() {
@@ -31,9 +31,11 @@ export default function index() {
     setRefreshing(false);
   };
 
-  useEffect(() => {
-    loadData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      loadData();
+    }, [])
+  );
 
   return (
     <View
@@ -42,7 +44,7 @@ export default function index() {
         justifyContent: "start",
         alignItems: "center",
         backgroundColor: "white",
-        borderWidth: 1,
+        borderWidth: 0,
         borderColor: "black",
         width: "100%",
       }}

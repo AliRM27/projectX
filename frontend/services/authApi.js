@@ -1,22 +1,13 @@
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { api } from "./api.js";
+import { router } from "expo-router";
 
-const API_BASE_URL = "http://192.168.178.46:4444/"; // Replace with your backend URL
-
-const authApi = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const API_URL = "http://192.168.178.46:4444/";
 
 // Register API
 export const registerUser = async (userData) => {
   try {
-    const response = await authApi.post(
-      API_BASE_URL + "auth/register",
-      userData
-    );
+    const response = await api.post(API_URL + "auth/register", userData);
     return response.data;
   } catch (error) {
     console.log(error || "Registration failed");
@@ -27,9 +18,14 @@ export const registerUser = async (userData) => {
 // Login API
 export const loginUser = async (userData) => {
   try {
-    const response = await authApi.post("auth/login", userData);
-    const token = response.data.accessToken;
-    await AsyncStorage.setItem("userToken", token);
+    const response = await api.post(API_URL + "auth/login", userData);
+    const { accessToken, refreshToken } = response.data;
+
+    if (accessToken && refreshToken) {
+      await AsyncStorage.setItem("accessToken", accessToken);
+      await AsyncStorage.setItem("refreshToken", refreshToken);
+    }
+
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Login failed";
@@ -39,9 +35,10 @@ export const loginUser = async (userData) => {
 // Logout API (optional)
 export const logoutUser = async () => {
   try {
-    const response = await authApi.post("/logout");
-    return response.data;
+    await AsyncStorage.removeItem("accessToken");
+    await AsyncStorage.removeItem("refreshToken");
+    router.replace("login");
   } catch (error) {
-    throw error.response?.data?.message || "Logout failed";
+    console.error(error);
   }
 };

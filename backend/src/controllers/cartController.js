@@ -95,7 +95,7 @@ export const updateCart = async (req, res) => {
 export const removeFromCart = async (req, res) => {
   try {
     const userId = req.userId;
-    const { productId } = req.params;
+    const { productId } = req.body;
     let cart = await Cart.findOne({ user: userId });
 
     if (!cart) return res.status(404).json({ message: "Cart not found" });
