@@ -1,12 +1,13 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refreshAccessToken } from "../utils/refreshToken.js";
+import { router } from "expo-router";
 
 const API_URL = "http://192.168.178.46:4444/";
 
 export const api = axios.create({
   baseURL: API_URL,
-  timeout: 2000,
+  timeout: 5000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -33,14 +34,16 @@ api.interceptors.response.use(
 
       try {
         const newAccessToken = await refreshAccessToken();
-        authApi.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+        api.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
-        return authApi(originalRequest); // Retry the failed request
+        return api(originalRequest); // Retry the failed request
       } catch (err) {
         console.log("Refresh token expired, logging out...");
+        // Optionally, you can log the user out here
         await AsyncStorage.removeItem("accessToken");
         await AsyncStorage.removeItem("refreshToken");
+        router.replace("/(auth)/login");
         return Promise.reject(err);
       }
     }
@@ -54,7 +57,7 @@ export const fetchHome = async () => {
     const response = await api.get(API_URL + "home?view=products");
     return response.data;
   } catch (error) {
-    console.error(error);
+    console.error(error, "Server error");
   }
 };
 

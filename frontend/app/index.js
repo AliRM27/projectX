@@ -10,11 +10,11 @@ const index = () => {
     const checkAuth = async () => {
       const token = await AsyncStorage.getItem("accessToken");
       if (token) {
+        console.log("Token found, navigating to tabs");
         router.replace("/(tabs)");
-        // return <Redirect href="/(tabs)" />;
       } else {
+        console.log("No token found, navigating to login");
         router.replace("/(auth)/login");
-        // return <Redirect href="/(auth)/login" />;
       }
       setLoading(false);
     };

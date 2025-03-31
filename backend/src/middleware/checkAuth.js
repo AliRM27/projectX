@@ -17,7 +17,7 @@ export default (req, res, next) => {
   } catch (err) {
     if (err.name === "TokenExpiredError") {
       return res
-        .status(401)
+        .status(403)
         .json({ message: "Token expired, please login again" });
     }
     return res.status(403).json({
