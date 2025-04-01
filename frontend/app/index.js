@@ -1,7 +1,8 @@
-import { Redirect, router } from "expo-router";
-import { View, Text, ActivityIndicator } from "react-native";
+import { router } from "expo-router";
+import { View, ActivityIndicator } from "react-native";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SplashScreen from "expo-splash-screen";
 
 const index = () => {
   const [loading, setLoading] = useState(true);
@@ -12,9 +13,11 @@ const index = () => {
       if (token) {
         console.log("Token found, navigating to tabs");
         router.replace("/(tabs)");
+        SplashScreen.hideAsync();
       } else {
         console.log("No token found, navigating to login");
         router.replace("/(auth)/login");
+        SplashScreen.hideAsync();
       }
       setLoading(false);
     };
