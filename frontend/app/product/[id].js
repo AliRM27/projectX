@@ -2,11 +2,13 @@ import { View, Text, Button, ActivityIndicator, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchProduct, addToCart } from "../../services/api.js";
+import { useQueryClient } from "@tanstack/react-query";
 
 const product = () => {
   const { id } = useLocalSearchParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
   const add = async () => {
     setLoading(true);
@@ -15,6 +17,7 @@ const product = () => {
     } catch (error) {
       console.error("Failed to add to cart");
     } finally {
+      queryClient.refetchQueries({ queryKey: ["cart"] });
       setLoading(false);
     }
   };

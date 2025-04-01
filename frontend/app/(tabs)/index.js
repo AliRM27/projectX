@@ -2,42 +2,29 @@ import {
   View,
   Text,
   ActivityIndicator,
-  FlatList,
   StyleSheet,
   Image,
   ScrollView,
 } from "react-native";
-import { Link, useFocusEffect } from "expo-router";
-import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "expo-router";
+import React from "react";
 import { fetchHome } from "../../services/api.js";
+import { useQuery } from "@tanstack/react-query";
 
 export default function index() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["products"], // Unique query key
+    queryFn: fetchHome,
+    refetchInterval: 1000 * 60 * 5,
+  });
 
-  const loadData = async () => {
-    try {
-      const result = await fetchHome();
-      setData(result.products);
-    } catch (error) {
-      console.error("Failed to load data");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleRefresh = () => {
-    setRefreshing(true);
-    loadData();
-    setRefreshing(false);
-  };
-
-  useFocusEffect(
-    useCallback(() => {
-      loadData();
-    }, [])
-  );
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text>Error: {error.message}</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -59,26 +46,11 @@ export default function index() {
         <View>
           <Text>Shops</Text>
         </View>
-        {loading ? (
+        {isLoading ? (
           <ActivityIndicator size="large" color="black" />
         ) : (
-          // <FlatList
-          //   style={{ width: "100%" }}
-          //   contentContainerStyle={styles.list}
-          //   data={data}
-          //   numColumns={2}
-          //   renderItem={({ item }) => (
-          //     <View style={styles.product}>
-          //       <Text>{item.name}</Text>
-          //       <Text>{item.newPrice}</Text>
-          //       <Link href={"../product/" + item._id}>View</Link>
-          //     </View>
-          //   )}
-          //   refreshing={refreshing}
-          //   onRefresh={handleRefresh}
-          // />
           <View style={styles.list}>
-            {data.map((item, key) => {
+            {data["products"].map((item, key) => {
               return (
                 <View key={key} style={styles.product}>
                   <Text>{item.name}</Text>
