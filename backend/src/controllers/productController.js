@@ -1,20 +1,23 @@
 import Product from "../models/Product.js";
+import Shop from "../models/Shop.js";
 
 // Get all discounted products
 export const getAllProducts = async (req, res) => {
   try {
-    const { category } = req.query;
+    const { shopId } = req.query;
     let products;
 
-    if (!category) {
+    if (!shopId) {
       products = await Product.find();
     } else {
-      products = await Product.find({ category });
+      products = await Product.find({ shopId });
+      let name = await Shop.findById(shopId);
+      products.push(name);
     }
 
-    if (products.length === 0) {
-      return res.status(404).json({ message: "No products available." });
-    }
+    // if (products.length === 0) {
+    //   return res.status(404).json({ message: "No products available." });
+    // }
 
     res.status(200).json(products);
   } catch (error) {

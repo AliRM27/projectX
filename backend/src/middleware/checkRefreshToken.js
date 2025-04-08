@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export default (req, res, next) => {
   const { refreshToken } = req.body;
-
+  // Check if refresh token is provided
   if (!refreshToken) {
     return res.status(400).json({ message: "Refresh token is required" });
   }

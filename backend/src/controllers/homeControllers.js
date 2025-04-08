@@ -13,11 +13,11 @@ export const getProductsOrShops = async (req, res) => {
     }
     if (view === "products") {
       const products = await Product.find().limit(10);
-      return res.status(200).json({ products, user });
+      return res.status(200).json({ products });
     }
     if (view === "shops") {
       const shops = await Shop.find().limit(10);
-      return res.status(200).json({ shops, user });
+      return res.status(200).json({ shops });
     }
     return res.status(404).json({ message: "Invalid view" });
   } catch (err) {

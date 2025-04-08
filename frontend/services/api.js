@@ -3,7 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refreshAccessToken } from "../utils/refreshToken.js";
 import { router } from "expo-router";
 
-const API_URL = "http://192.168.178.46:4444/";
+export let API_URL = "http://192.168.178.46:4444/";
+API_URL = "http://192.168.68.103:4444/";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -52,12 +53,22 @@ api.interceptors.response.use(
   }
 );
 
-export const fetchHome = async () => {
+export const fetchHome = async ({ queryKey }) => {
   try {
-    const response = await api.get(API_URL + "home?view=products");
+    const response = await api.get(API_URL + "home?view=" + queryKey[0]);
     return response.data;
   } catch (error) {
     console.error(error, "Server error");
+  }
+};
+
+export const fetchProducts = async (id) => {
+  try {
+    const response = await api.get(API_URL + "products?shopId=" + id);
+    // console.table(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
   }
 };
 

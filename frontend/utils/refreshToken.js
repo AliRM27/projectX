@@ -1,7 +1,7 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_BASE_URL = "http://192.168.178.46:4444/";
+const API_BASE_URL = "http://192.168.68.103:4444/";
 
 export const refreshAccessToken = async () => {
   try {

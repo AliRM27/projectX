@@ -39,6 +39,7 @@ export default function _layout() {
               name="product/[id]"
               options={{ headerShown: false }}
             />
+            <Stack.Screen name="shop/[id]" options={{ headerShown: false }} />
           </Stack>
         </QueryClientProvider>
       </SafeAreaView>

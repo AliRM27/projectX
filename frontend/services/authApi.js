@@ -1,8 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api } from "./api.js";
+import { api, API_URL } from "./api.js";
 import { router } from "expo-router";
-
-const API_URL = "http://192.168.178.46:4444/";
 
 // Register API
 export const registerUser = async (userData) => {

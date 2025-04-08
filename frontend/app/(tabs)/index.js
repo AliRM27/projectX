@@ -5,15 +5,21 @@ import {
   StyleSheet,
   Image,
   ScrollView,
+  Pressable,
+  TouchableOpacity,
 } from "react-native";
 import { Link } from "expo-router";
-import React from "react";
+import React, { useState } from "react";
 import { fetchHome } from "../../services/api.js";
 import { useQuery } from "@tanstack/react-query";
+import Product from "../../components/Product.jsx";
+import Shop from "../../components/Shop.jsx";
 
 export default function index() {
+  const [state, setState] = useState("products");
+
   const { data, isLoading, error } = useQuery({
-    queryKey: ["products"], // Unique query key
+    queryKey: [state], // Unique query key
     queryFn: fetchHome,
     refetchInterval: 1000 * 60 * 5,
   });
@@ -22,6 +28,22 @@ export default function index() {
     return (
       <View style={styles.container}>
         <Text>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="black" />
+      </View>
+    );
+  }
+
+  if (!data) {
+    return (
+      <View style={styles.container}>
+        <Text>No data found</Text>
       </View>
     );
   }
@@ -43,24 +65,56 @@ export default function index() {
             style={{ width: "100%", height: 200 }}
           />
         </View>
-        <View>
-          <Text>Shops</Text>
+        <View style={styles.toggle}>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              state === "products" ? styles.active : styles.inactive,
+            ]}
+            onPress={() => setState("products")}
+          >
+            <Text
+              style={
+                state === "products" ? { color: "white" } : { color: "black" }
+              }
+            >
+              Products
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{ backgroundColor: "black", width: 1, height: 40 }}
+          ></View>
+          <TouchableOpacity
+            style={[
+              styles.button,
+              state === "shops" ? styles.active : styles.inactive,
+            ]}
+            onPress={() => setState("shops")}
+          >
+            <Text
+              style={
+                state === "shops" ? { color: "white" } : { color: "black" }
+              }
+            >
+              Shops
+            </Text>
+          </TouchableOpacity>
         </View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="black" />
-        ) : (
-          <View style={styles.list}>
-            {data["products"].map((item, key) => {
-              return (
-                <View key={key} style={styles.product}>
-                  <Text>{item.name}</Text>
-                  <Text>{item.newPrice}</Text>
-                  <Link href={"../product/" + item._id}>View</Link>
-                </View>
-              );
-            })}
-          </View>
-        )}
+        <View style={styles.list}>
+          {data[state].map((item, key) => {
+            return state === "products" ? (
+              <Product key={key} item={item} />
+            ) : (
+              <Link
+                href={"../shop/" + item._id}
+                key={key}
+                style={{ margin: 10 }}
+              >
+                <Shop item={item} />
+              </Link>
+            );
+          })}
+        </View>
       </ScrollView>
     </View>
   );
@@ -89,15 +143,27 @@ const styles = StyleSheet.create({
     borderColor: "black",
     paddingBottom: 50,
   },
-  product: {
+  toggle: {
+    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "white",
+    marginRight: 37,
+    margin: 20,
+    gap: 10,
+  },
+  button: {
     borderWidth: 1,
+    padding: 10,
     borderColor: "black",
-    width: 150,
-    height: 200,
-    margin: 10,
     borderRadius: 10,
+    height: 40,
+    backgroundColor: "white",
+  },
+  active: {
+    backgroundColor: "black",
+    color: "white",
+  },
+  inactive: {
+    backgroundColor: "white",
+    color: "black",
   },
 });
