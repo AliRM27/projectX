@@ -1,8 +1,17 @@
-import { View, Text, Button, ActivityIndicator, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  ActivityIndicator,
+  Pressable,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchProduct, addToCart } from "../../services/api.js";
 import { useQueryClient } from "@tanstack/react-query";
+import ArrowBack from "../../assets/arrowleft.svg";
 
 const product = () => {
   const { id } = useLocalSearchParams();
@@ -19,6 +28,7 @@ const product = () => {
     } finally {
       queryClient.refetchQueries({ queryKey: ["cart"] });
       setLoading(false);
+      alert("Added to cart");
     }
   };
 
@@ -38,25 +48,69 @@ const product = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+      }}
+    >
       <Pressable
         onPress={() => {
           router.back();
         }}
         style={{ position: "absolute", top: 0, left: 0, padding: 10 }}
       >
-        <Text>Back</Text>
+        <ArrowBack width={30} height={30} />
       </Pressable>
       {loading ? (
         <ActivityIndicator size="large" color="black" />
       ) : (
-        <View>
-          <Text>product - {id}</Text>
-          <Text>{data.name}</Text>
-          <Text>{data.description}</Text>
-          <Text>{data.oldPrice}</Text>
-          <Text>{data.newPrice}</Text>
-          <Button title="Add to Cart" onPress={add} />
+        <View style={{ alignItems: "center", width: "100%" }}>
+          <Image
+            source={require("../../assets/examples/nikeShoe.png")}
+            style={{
+              width: 350,
+              height: 350,
+              borderRadius: 10,
+              marginBottom: 20,
+              marginTop: 50,
+            }}
+          />
+          <View>
+            <Text style={{ fontSize: 30, marginBottom: 10 }}>{data.name}</Text>
+            <Text style={{ fontSize: 15, marginBottom: 100 }}>
+              {data.description}
+            </Text>
+            <Text
+              style={{
+                fontSize: 20,
+                textDecorationLine: "line-through",
+                color: "grey",
+              }}
+            >
+              {data.oldPrice}€
+            </Text>
+            <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+              {data.newPrice}€
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={add}
+            style={{
+              marginTop: 40,
+              backgroundColor: "black",
+              padding: 20,
+              width: 350,
+              borderRadius: 10,
+            }}
+            activeOpacity={0.8}
+          >
+            <Text style={{ color: "white", textAlign: "center", fontSize: 15 }}>
+              Add to Cart
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>

@@ -4,6 +4,7 @@ import { useLocalSearchParams } from "expo-router";
 import { fetchProducts } from "../../services/api";
 import Product from "../../components/Product";
 import { router } from "expo-router";
+import ArrowBack from "../../assets/arrowleft.svg";
 
 const shop = () => {
   const { id } = useLocalSearchParams();
@@ -26,14 +27,21 @@ const shop = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#fff",
+      }}
+    >
       <Pressable
         onPress={() => {
           router.back();
         }}
         style={{ position: "absolute", top: 0, left: 0, padding: 10 }}
       >
-        <Text>Back</Text>
+        <ArrowBack width={30} height={30} />
       </Pressable>
       {loading ? (
         <View>
