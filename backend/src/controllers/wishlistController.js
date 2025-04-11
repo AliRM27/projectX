@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 export const getWishList = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId).populate(wishList.productId);
 
     if (!user) {
       return res.status(404).json({

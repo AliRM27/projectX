@@ -121,3 +121,31 @@ export const removeFromCart = async (productId) => {
     console.error(error);
   }
 };
+
+export const fetchFavorites = async () => {
+  try {
+    const response = await api.get(API_URL + "wishlist");
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const addToFavorites = async (productId) => {
+  try {
+    const response = await api.post(API_URL + "wishlist", { productId });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const removeFromFavorites = async (productId) => {
+  try {
+    const response = await api.delete(API_URL + "wishlist/" + productId);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -8,10 +8,25 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Like from "../assets/like.svg";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
+import { addToFavorites, removeFromFavorites } from "../services/api";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Product = ({ item }) => {
-  const [liked, setLiked] = useState(false);
+  const [liked, setLiked] = useState();
+  const queryClient = useQueryClient();
+
+  const handleLike = async () => {
+    setLiked(!liked);
+    if (liked) {
+      await addToFavorites(item._id);
+      queryClient.invalidateQueries(["favorites"]);
+    } else {
+      await removeFromFavorites(item._id);
+      queryClient.invalidateQueries(["favorites"]);
+    }
+  };
+
   return (
     <View style={styles.product} onPress={() => alert("Product clicked")}>
       <TouchableOpacity
@@ -27,7 +42,7 @@ const Product = ({ item }) => {
             {item.name}
           </Text>
           <Text style={{ textDecorationLine: "line-through", color: "grey" }}>
-            {item.oldPrice}€
+            {item.oldPrice}€{item.isFavorite}
           </Text>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
             {item.newPrice}€
@@ -38,14 +53,14 @@ const Product = ({ item }) => {
         {liked ? (
           <Like
             fill={"red"}
-            onPress={() => setLiked(false)}
+            onPress={() => handleLike()}
             width={25}
             height={25}
           />
         ) : (
           <Like
             fill={"transparent"}
-            onPress={() => setLiked(true)}
+            onPress={() => handleLike()}
             width={25}
             height={25}
           />
