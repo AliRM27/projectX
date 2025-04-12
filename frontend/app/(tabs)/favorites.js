@@ -6,25 +6,28 @@ import {
   StyleSheet,
 } from "react-native";
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchFavorites, removeFromFavorites } from "../../services/api.js";
 
 const favorites = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["favorites"], // Unique query key
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["favorites"],
     queryFn: fetchFavorites,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: false,
     enabled: true,
   });
-  console.log(data);
+  const queryClient = useQueryClient();
+
   const remove = async (productId) => {
     try {
       await removeFromFavorites(productId);
-      queryClient.invalidateQueries(["favorites"]);
     } catch (error) {
-      console.error("Error removing from favorites:", error);
+      console.error(error);
+    } finally {
+      queryClient.refetchQueries({ queryKey: ["products"] });
+      refetch();
     }
   };
 
@@ -48,16 +51,14 @@ const favorites = () => {
       <Text>Wishlist</Text>
       {isLoading ? (
         <Text>Loading...</Text>
-      ) : data.length === 0 ? (
+      ) : data.items.length === 0 ? (
         <Text>Wishlist is empty</Text>
       ) : (
         <ScrollView>
-          {data.map((item, key) => {
+          {data.items.map((item, key) => {
             return (
               <View key={key} style={styles.item}>
-                <Text>
-                  {item.product.name} - {item.quantity}
-                </Text>
+                <Text>{item.product.name}</Text>
                 <TouchableOpacity
                   onPress={() => {
                     remove(item.product._id);

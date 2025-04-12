@@ -21,7 +21,7 @@ export default function cart() {
 
   const remove = async (productId) => {
     try {
-      await removeFromCart(productId);
+      const response = await removeFromCart(productId);
     } catch (error) {
       console.error(error);
     } finally {

@@ -29,15 +29,6 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
-    wishList: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-          required: true,
-        },
-      },
-    ],
   },
   { timestamps: true }
 );

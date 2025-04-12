@@ -5,12 +5,11 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  Pressable,
   TouchableOpacity,
 } from "react-native";
 import { Link } from "expo-router";
 import React, { useState } from "react";
-import { fetchHome } from "../../services/api.js";
+import { fetchHome, fetchFavorites } from "../../services/api.js";
 import { useQuery } from "@tanstack/react-query";
 import Product from "../../components/Product.jsx";
 import Shop from "../../components/Shop.jsx";
@@ -18,10 +17,19 @@ import Shop from "../../components/Shop.jsx";
 export default function index() {
   const [state, setState] = useState("products");
 
-  const { data, isLoading, error } = useQuery({
+  const {
+    data: data,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: [state], // Unique query key
     queryFn: fetchHome,
     refetchInterval: 1000 * 60 * 5,
+  });
+
+  const { data: dataFavorite } = useQuery({
+    queryKey: ["favorite"],
+    queryFn: fetchFavorites,
   });
 
   if (error) {
@@ -103,7 +111,13 @@ export default function index() {
         <View style={styles.list}>
           {data[state].map((item, key) => {
             return state === "products" ? (
-              <Product key={key} item={item} />
+              <Product
+                key={key}
+                item={item}
+                favorite={dataFavorite.items.some(
+                  (item2) => item2.product._id === item._id
+                )}
+              />
             ) : (
               <Link
                 href={"../shop/" + item._id}

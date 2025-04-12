@@ -125,7 +125,6 @@ export const removeFromCart = async (productId) => {
 export const fetchFavorites = async () => {
   try {
     const response = await api.get(API_URL + "wishlist");
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -143,7 +142,9 @@ export const addToFavorites = async (productId) => {
 
 export const removeFromFavorites = async (productId) => {
   try {
-    const response = await api.delete(API_URL + "wishlist/" + productId);
+    const response = await api.delete(API_URL + "wishlist", {
+      data: { productId },
+    });
     return response.data;
   } catch (error) {
     console.error(error);

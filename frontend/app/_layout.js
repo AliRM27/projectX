@@ -3,6 +3,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
+// import GlobalDataLoader from "../components/GlobalLoader";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,6 +25,7 @@ export default function _layout() {
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <StatusBar barStyle="dark-content" />
         <QueryClientProvider client={queryClient}>
+          {/* <GlobalDataLoader /> */}
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             <Stack.Screen

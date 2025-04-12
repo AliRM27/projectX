@@ -6,24 +6,28 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Like from "../assets/like.svg";
 import { router } from "expo-router";
 import { addToFavorites, removeFromFavorites } from "../services/api";
 import { useQueryClient } from "@tanstack/react-query";
 
-const Product = ({ item }) => {
-  const [liked, setLiked] = useState();
+const Product = ({ item, favorite }) => {
+  const [liked, setLiked] = useState(favorite);
   const queryClient = useQueryClient();
 
   const handleLike = async () => {
     setLiked(!liked);
-    if (liked) {
-      await addToFavorites(item._id);
-      queryClient.invalidateQueries(["favorites"]);
-    } else {
-      await removeFromFavorites(item._id);
-      queryClient.invalidateQueries(["favorites"]);
+    try {
+      if (!liked) {
+        await addToFavorites(item._id);
+      } else {
+        await removeFromFavorites(item._id);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      queryClient.refetchQueries({ queryKey: ["favorites"] });
     }
   };
 

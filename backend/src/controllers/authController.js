@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import Cart from "../models/Cart.js";
+import WishList from "../models/WishList.js";
 
 export const register = async (req, res) => {
   try {
@@ -27,6 +28,10 @@ export const register = async (req, res) => {
     // Create a cart for the user
     const newCart = new Cart({ user: newUser._id, items: [], totalPrice: 0 });
 
+    // Create a wishlist for the user
+    const newWishList = new WishList({ user: newUser._id, items: [] });
+
+    await newWishList.save();
     await newCart.save();
     await newUser.save();
 

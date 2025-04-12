@@ -1,49 +1,51 @@
-import User from "../models/User.js";
+import WishList from "../models/WishList.js";
 import mongoose from "mongoose";
 
 export const getWishList = async (req, res) => {
   try {
-    const user = await User.findById(req.userId).populate(wishList.productId);
-
-    if (!user) {
+    const userId = req.userId;
+    const wishList = await WishList.findOne({ user: userId }).populate(
+      "items.product"
+    );
+    if (!wishList) {
       return res.status(404).json({
-        message: "User not found",
+        message: "WishList not found",
       });
     }
 
-    res.status(200).json(user.wishList);
+    res.status(200).json(wishList);
   } catch (err) {
     res.status(500).json({
-      message: "Failed to retrieve user data",
+      message: "Failed to retrieve wishlist",
     });
   }
 };
 
 export const addToWishList = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const wishList = await WishList.findOne({ user: req.userId }).populate(
+      "items.product"
+    );
 
-    if (!user) {
+    if (!wishList) {
       return res.status(404).json({
         message: "User not found",
       });
     }
 
-    user.wishList.forEach((item) => {
-      if (item.productId.toString() === req.body.productId) {
+    wishList.items.forEach((item) => {
+      if (item.product._id.toString() === req.body.productId) {
         return res.status(400).json({
           message: "Product already in wishlist",
         });
       }
     });
 
-    await user.updateOne({
-      $push: {
-        wishList: {
-          productId: new mongoose.Types.ObjectId(req.body.productId),
-        },
-      },
+    wishList.items.push({
+      product: req.body.productId,
     });
+
+    await wishList.save();
 
     res.status(200).json({
       message: "Product added to wishlist",
@@ -58,31 +60,26 @@ export const addToWishList = async (req, res) => {
 
 export const removeFromWishList = async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
-    const { productId } = req.params;
-    let isRemoved = false;
+    const { productId } = req.body;
+    const wishList = await WishList.findOne({ user: req.userId }).populate(
+      "items.product"
+    );
 
-    if (!user) {
+    if (!wishList) {
       return res.status(404).json({
         message: "User not found",
       });
     }
 
-    user.wishList.forEach(async (item) => {
-      if (item.productId.toString() === productId) {
-        await user.updateOne({
+    wishList.items.forEach(async (item) => {
+      if (item.product._id.toString() === productId) {
+        await wishList.updateOne({
           $pull: {
-            wishList: { productId: new mongoose.Types.ObjectId(productId) },
+            items: { product: new mongoose.Types.ObjectId(productId) },
           },
         });
-        isRemoved = true;
       }
     });
-
-    if (isRemoved)
-      return res.status(400).json({
-        message: "Product not in wishlist",
-      });
 
     return res.status(200).json({
       message: "Product removed from wishlist",
