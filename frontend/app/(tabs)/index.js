@@ -140,13 +140,9 @@ export default function index() {
         <View style={styles.list}>
           {data[state].map((item, key) => {
             return state === "products" && refresh ? (
-              <Product
-                key={key}
-                item={item}
-                favorite={dataFavorite.items.some((item2) => {
-                  return item2.product._id === item._id;
-                })}
-              />
+              <View key={key} style={{ margin: 10 }}>
+                <Text>A Shop</Text>
+              </View>
             ) : (
               <Link
                 href={"../shop/" + item._id}
