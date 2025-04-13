@@ -3,6 +3,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
+import { UserProvider } from "../context/favoriteContext";
 // import GlobalDataLoader from "../components/GlobalLoader";
 
 SplashScreen.preventAutoHideAsync();
@@ -26,22 +27,24 @@ export default function _layout() {
         <StatusBar barStyle="dark-content" />
         <QueryClientProvider client={queryClient}>
           {/* <GlobalDataLoader /> */}
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="(auth)/register"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="(auth)/login"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="product/[id]"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen name="shop/[id]" options={{ headerShown: false }} />
-          </Stack>
+          <UserProvider>
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="(auth)/register"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="(auth)/login"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="product/[id]"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen name="shop/[id]" options={{ headerShown: false }} />
+            </Stack>
+          </UserProvider>
         </QueryClientProvider>
       </SafeAreaView>
     </SafeAreaProvider>

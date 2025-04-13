@@ -6,7 +6,7 @@ import {
   Pressable,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Like from "../assets/like.svg";
 import { router } from "expo-router";
 import { addToFavorites, removeFromFavorites } from "../services/api";
@@ -17,22 +17,21 @@ const Product = ({ item, favorite }) => {
   const queryClient = useQueryClient();
 
   const handleLike = async () => {
-    setLiked(!liked);
     try {
       if (!liked) {
-        await addToFavorites(item._id);
+        await addToFavorites(item._id); // Add to wishlist
       } else {
-        await removeFromFavorites(item._id);
+        await removeFromFavorites(item._id); // Remove from wishlist
       }
+      setLiked(!liked); // Toggle the liked state
+      queryClient.invalidateQueries(["favorites"]); // Refresh the wishlist data
     } catch (error) {
-      console.error(error);
-    } finally {
-      queryClient.refetchQueries({ queryKey: ["favorites"] });
+      console.error("Error updating wishlist:", error);
     }
   };
 
   return (
-    <View style={styles.product} onPress={() => alert("Product clicked")}>
+    <View style={styles.product}>
       <TouchableOpacity
         onPress={() => router.push(`/product/${item._id}`)}
         activeOpacity={0.9}
@@ -53,22 +52,15 @@ const Product = ({ item, favorite }) => {
           </Text>
         </View>
       </TouchableOpacity>
-      <Pressable style={{ position: "absolute", bottom: 10, right: 10 }}>
-        {liked ? (
-          <Like
-            fill={"red"}
-            onPress={() => handleLike()}
-            width={25}
-            height={25}
-          />
-        ) : (
-          <Like
-            fill={"transparent"}
-            onPress={() => handleLike()}
-            width={25}
-            height={25}
-          />
-        )}
+      <Pressable
+        style={{ position: "absolute", bottom: 10, right: 10 }}
+        onPress={handleLike}
+      >
+        <Like
+          fill={liked ? "black" : "transparent"} // Red if liked, transparent otherwise
+          width={25}
+          height={25}
+        />
       </Pressable>
     </View>
   );

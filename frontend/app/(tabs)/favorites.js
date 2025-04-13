@@ -8,26 +8,23 @@ import {
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchFavorites, removeFromFavorites } from "../../services/api.js";
+import { useRemoved } from "../../context/favoriteContext.js";
 
 const favorites = () => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { isRemoved, setRemoved } = useRemoved(); // Access the global variable
+  const { data, isLoading, error } = useQuery({
     queryKey: ["favorites"],
     queryFn: fetchFavorites,
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
-    enabled: true,
   });
   const queryClient = useQueryClient();
 
   const remove = async (productId) => {
     try {
-      await removeFromFavorites(productId);
+      await removeFromFavorites(productId); // Remove from wishlist
+      queryClient.invalidateQueries(["favorites"]); // Refresh the wishlist data
+      setRemoved((p) => !p); // Set the global variable to true
     } catch (error) {
       console.error(error);
-    } finally {
-      queryClient.refetchQueries({ queryKey: ["products"] });
-      refetch();
     }
   };
 
@@ -38,6 +35,7 @@ const favorites = () => {
       </View>
     );
   }
+
   return (
     <View
       style={{

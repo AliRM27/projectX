@@ -6,31 +6,56 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import { Link } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { fetchHome, fetchFavorites } from "../../services/api.js";
+import { useFocusEffect } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import Product from "../../components/Product.jsx";
 import Shop from "../../components/Shop.jsx";
+import { useRemoved } from "../../context/favoriteContext.js";
 
 export default function index() {
   const [state, setState] = useState("products");
+  const [refresh, setRefresh] = useState(true);
+  const { isRemoved, setRemoved } = useRemoved(); // Access the global variable
+  const forceRerender = () => {
+    if (isRemoved) {
+      setRemoved(false);
+      setRefresh((p) => !p);
+    }
+  }; // Function to force re-render
 
   const {
     data: data,
     isLoading,
     error,
+    refetch: refetchHome,
   } = useQuery({
     queryKey: [state], // Unique query key
     queryFn: fetchHome,
     refetchInterval: 1000 * 60 * 5,
   });
 
-  const { data: dataFavorite } = useQuery({
+  const {
+    data: dataFavorite,
+    isLoading: loading,
+    refetch,
+  } = useQuery({
     queryKey: ["favorite"],
     queryFn: fetchFavorites,
   });
+
+  useFocusEffect(
+    useCallback(() => {
+      forceRerender();
+      return () => {
+        forceRerender(); // Cleanup function to force re-render when leaving the screen
+      };
+    }, [refetch, refetchHome])
+  );
 
   if (error) {
     return (
@@ -66,7 +91,11 @@ export default function index() {
       >
         <Text style={styles.heading}>SnapShop</Text>
       </View>
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+        }
+      >
         <View style={(styles.banner, { alignItems: "center", marginTop: 20 })}>
           <Image
             source={require("../../assets/banner.png")}
@@ -110,13 +139,13 @@ export default function index() {
         </View>
         <View style={styles.list}>
           {data[state].map((item, key) => {
-            return state === "products" ? (
+            return state === "products" && refresh ? (
               <Product
                 key={key}
                 item={item}
-                favorite={dataFavorite.items.some(
-                  (item2) => item2.product._id === item._id
-                )}
+                favorite={dataFavorite.items.some((item2) => {
+                  return item2.product._id === item._id;
+                })}
               />
             ) : (
               <Link
