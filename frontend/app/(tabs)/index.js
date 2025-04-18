@@ -90,7 +90,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     width: "100%",
   },
-  banner: {},
   heading: {
     fontFamily: "sans-serif",
     fontWeight: "bold",

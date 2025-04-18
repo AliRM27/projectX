@@ -11,7 +11,7 @@ const shopSchema = new mongoose.Schema(
       required: true,
     },
     location: {
-      streetNameAndNumber: {
+      adress: {
         type: String,
         required: true,
       },

@@ -7,6 +7,10 @@ const productSchema = new mongoose.Schema(
       default: "Mysety Bag",
       required: true,
     },
+    category: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
@@ -23,21 +27,20 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    // category: {
-    //   type: String,
-    //   required: true,
-    // },
-    imageUrl: {
-      type: String, // URL or file path for the image
-      required: true,
-    },
+    images: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop", // Reference to the shop who added the product
       required: true,
     },
     pickUpTime: {
-      type: Date,
+      type: String,
+      required: true,
     },
     bagDetails: {
       type: Object,
