@@ -38,6 +38,7 @@ export default function _layout() {
                 name="(auth)/login"
                 options={{ headerShown: false }}
               />
+              <Stack.Screen name="welcome" options={{ headerShown: false }} />
               <Stack.Screen
                 name="product/[id]"
                 options={{ headerShown: false }}

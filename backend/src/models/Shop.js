@@ -6,9 +6,31 @@ const shopSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    location: {
+    category: {
       type: String,
-      required: true, // Store address
+      required: true,
+    },
+    location: {
+      streetNameAndNumber: {
+        type: String,
+        required: true,
+      },
+      postalCode: {
+        type: Number,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      country: {
+        type: String,
+        required: true,
+      },
+    },
+    contact: {
+      type: String,
+      required: true,
     },
     products: [
       {
@@ -23,13 +45,6 @@ const shopSchema = new mongoose.Schema(
     imageUrl: {
       type: String, // URL or file path for the image
       required: true,
-    },
-    seller: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Seller", // Owner of the shop
-      required: true,
-      max: 1,
-      default: 1,
     },
   },
   { timestamps: true }

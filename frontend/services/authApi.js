@@ -6,6 +6,8 @@ import { router } from "expo-router";
 export const registerUser = async (userData) => {
   try {
     const response = await api.post(API_URL + "auth/register", userData);
+
+    await AsyncStorage.setItem("hasLaunched", "true");
     return response.data;
   } catch (error) {
     console.log(error || "Registration failed");

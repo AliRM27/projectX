@@ -9,8 +9,13 @@ const index = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      const hasLaunched = await AsyncStorage.getItem("hasLaunched");
       const token = await AsyncStorage.getItem("accessToken");
-      if (token) {
+      if (!hasLaunched) {
+        console.log("First Time here");
+        router.replace("/welcome");
+        SplashScreen.hideAsync();
+      } else if (token) {
         console.log("Token found, navigating to tabs");
         router.replace("/(tabs)");
         SplashScreen.hideAsync();

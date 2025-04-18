@@ -18,44 +18,16 @@ import Shop from "../../components/Shop.jsx";
 import { useRemoved } from "../../context/favoriteContext.js";
 
 export default function index() {
-  const [state, setState] = useState("products");
-  const [refresh, setRefresh] = useState(true);
-  const { isRemoved, setRemoved } = useRemoved(); // Access the global variable
-  const forceRerender = () => {
-    if (isRemoved) {
-      setRemoved(false);
-      setRefresh((p) => !p);
-    }
-  }; // Function to force re-render
-
   const {
     data: data,
     isLoading,
     error,
-    refetch: refetchHome,
+    refetch,
   } = useQuery({
-    queryKey: [state], // Unique query key
+    queryKey: ["home", "all"], // Unique query key
     queryFn: fetchHome,
     refetchInterval: 1000 * 60 * 5,
   });
-
-  const {
-    data: dataFavorite,
-    isLoading: loading,
-    refetch,
-  } = useQuery({
-    queryKey: ["favorite"],
-    queryFn: fetchFavorites,
-  });
-
-  useFocusEffect(
-    useCallback(() => {
-      forceRerender();
-      return () => {
-        forceRerender(); // Cleanup function to force re-render when leaving the screen
-      };
-    }, [refetch, refetchHome])
-  );
 
   if (error) {
     return (
@@ -96,61 +68,12 @@ export default function index() {
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }
       >
-        <View style={(styles.banner, { alignItems: "center", marginTop: 20 })}>
-          <Image
-            source={require("../../assets/banner.png")}
-            style={{ width: "100%", height: 200 }}
-          />
-        </View>
-        <View style={styles.toggle}>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              state === "products" ? styles.active : styles.inactive,
-            ]}
-            onPress={() => setState("products")}
-          >
-            <Text
-              style={
-                state === "products" ? { color: "white" } : { color: "black" }
-              }
-            >
-              Products
-            </Text>
-          </TouchableOpacity>
-          <View
-            style={{ backgroundColor: "black", width: 1, height: 40 }}
-          ></View>
-          <TouchableOpacity
-            style={[
-              styles.button,
-              state === "shops" ? styles.active : styles.inactive,
-            ]}
-            onPress={() => setState("shops")}
-          >
-            <Text
-              style={
-                state === "shops" ? { color: "white" } : { color: "black" }
-              }
-            >
-              Shops
-            </Text>
-          </TouchableOpacity>
-        </View>
         <View style={styles.list}>
-          {data[state].map((item, key) => {
-            return state === "products" && refresh ? (
+          {data["products"].map((item, key) => {
+            return (
               <View key={key} style={{ margin: 10 }}>
                 <Text>A Shop</Text>
               </View>
-            ) : (
-              <Link
-                href={"../shop/" + item._id}
-                key={key}
-                style={{ margin: 10 }}
-              >
-                <Shop item={item} />
-              </Link>
             );
           })}
         </View>

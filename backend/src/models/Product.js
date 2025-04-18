@@ -2,8 +2,9 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
+      default: "Mysety Bag",
       required: true,
     },
     description: {
@@ -22,10 +23,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    category: {
-      type: String,
-      required: true,
-    },
+    // category: {
+    //   type: String,
+    //   required: true,
+    // },
     imageUrl: {
       type: String, // URL or file path for the image
       required: true,
@@ -33,6 +34,13 @@ const productSchema = new mongoose.Schema(
     shopId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Shop", // Reference to the shop who added the product
+      required: true,
+    },
+    pickUpTime: {
+      type: Date,
+    },
+    bagDetails: {
+      type: Object,
       required: true,
     },
   },

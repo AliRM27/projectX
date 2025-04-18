@@ -55,7 +55,7 @@ api.interceptors.response.use(
 
 export const fetchHome = async ({ queryKey }) => {
   try {
-    const response = await api.get(API_URL + "home?view=" + queryKey[0]);
+    const response = await api.get(API_URL + "home?view=" + queryKey[1]);
     return response.data;
   } catch (error) {
     console.error(error, "Server error");
