@@ -7,15 +7,14 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  Pressable,
 } from "react-native";
 import { Link } from "expo-router";
 import React, { useState, useCallback } from "react";
 import { fetchHome, fetchFavorites } from "../../services/api.js";
 import { useFocusEffect } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
-import Product from "../../components/Product.jsx";
-import Shop from "../../components/Shop.jsx";
-import { useRemoved } from "../../context/favoriteContext.js";
+import Categorie from "../../components/Categorie.jsx";
 
 export default function index() {
   const {
@@ -58,7 +57,7 @@ export default function index() {
       <View
         style={
           (styles.container,
-          { marginTop: 25, marginLeft: 15, paddingBottom: 15 })
+          { marginTop: 25, marginLeft: 25, marginBottom: 35 })
         }
       >
         <Text style={styles.heading}>SnapShop</Text>
@@ -68,11 +67,23 @@ export default function index() {
           <RefreshControl refreshing={isLoading} onRefresh={refetch} />
         }
       >
+        <ScrollView
+          horizontal={true}
+          contentContainerStyle={{ justifyContent: "center" }}
+          showsHorizontalScrollIndicator={false}
+        >
+          <Categorie name={"All"} extra={{ marginLeft: 30 }} />
+          <Categorie name={"Fashion"} />
+          <Categorie name={"Cosmetic"} />
+          <Categorie name={"Toys"} />
+          <Categorie name={"Home"} />
+          <Categorie name={"Accesoirs"} />
+        </ScrollView>
         <View style={styles.list}>
           {data["products"].map((item, key) => {
             return (
               <View key={key} style={{ margin: 10 }}>
-                <Text>A Shop</Text>
+                <Text>{item.title}</Text>
               </View>
             );
           })}
@@ -103,6 +114,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: "black",
     paddingBottom: 50,
+    marginTop: 20,
   },
   toggle: {
     flexDirection: "row",
