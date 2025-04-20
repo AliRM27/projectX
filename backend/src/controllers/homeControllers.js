@@ -7,17 +7,19 @@ export const getHome = async (req, res) => {
     const { view } = req.query;
 
     if (!view) {
-      return res.status(400).json({ message: "Invalid view parametar" });
+      return res.status(400).json({ message: "Invalid view parameter" });
     }
-    if (view === "all") {
-      const products = await Product.find().limit(10);
-      return res.status(200).json({ products });
+
+    const categories = view.split(",");
+    let products;
+
+    if (categories.includes("all")) {
+      products = await Product.find().limit(10);
+    } else {
+      products = await Product.find({ category: { $in: categories } });
     }
-    if (view === "clothing") {
-      const shops = await Shop.find().limit(10);
-      return res.status(200).json({ shops });
-    }
-    return res.status(404).json({ message: "Invalid view" });
+
+    return res.status(200).json({ products });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Server Error" });

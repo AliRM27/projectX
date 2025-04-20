@@ -54,8 +54,10 @@ api.interceptors.response.use(
 );
 
 export const fetchHome = async ({ queryKey }) => {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
   try {
-    const response = await api.get(API_URL + "home?view=" + queryKey[1]);
+    const queries = queryKey.slice(1).join(",");
+    const response = await api.get(`${API_URL}home?view=${queries}`);
     return response.data;
   } catch (error) {
     console.error(error, "Server error");
@@ -65,7 +67,6 @@ export const fetchHome = async ({ queryKey }) => {
 export const fetchProducts = async (id) => {
   try {
     const response = await api.get(API_URL + "products?shopId=" + id);
-    // console.table(response.data);
     return response.data;
   } catch (error) {
     console.error(error);

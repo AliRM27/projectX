@@ -1,8 +1,9 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useState } from "react";
 
-const Categorie = ({ name, extra }) => {
-  const [isActive, setisActive] = useState(false);
+const Categorie = ({ name, extra, setQuery, queries }) => {
+  const isActive = queries.includes(name);
+
   return (
     <Pressable
       style={[
@@ -10,7 +11,9 @@ const Categorie = ({ name, extra }) => {
         isActive ? styles.active : styles.inActive,
         extra,
       ]}
-      onPress={() => setisActive((p) => !p)}
+      onPress={() => {
+        setQuery(name);
+      }}
     >
       <Text
         style={[
@@ -18,7 +21,7 @@ const Categorie = ({ name, extra }) => {
           isActive ? styles.active.txt : styles.inActive.txt,
         ]}
       >
-        {name}
+        {name.charAt(0).toUpperCase() + name.slice(1)}
       </Text>
     </Pressable>
   );
