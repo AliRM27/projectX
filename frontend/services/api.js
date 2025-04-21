@@ -5,7 +5,7 @@ import { router } from "expo-router";
 
 export let API_URL = "http://192.168.178.46:4444/"; //pc
 API_URL = "http://192.168.68.103:4444/"; //pc main
-API_URL = "http://192.168.178.29:4444/"; //mac
+// API_URL = "http://192.168.178.29:4444/"; //mac
 
 export const api = axios.create({
   baseURL: API_URL,
