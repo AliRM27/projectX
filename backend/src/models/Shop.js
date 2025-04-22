@@ -46,6 +46,10 @@ const shopSchema = new mongoose.Schema(
       type: String, // URL or file path for the image
       required: true,
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

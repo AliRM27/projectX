@@ -11,13 +11,13 @@ const index = () => {
     const checkAuth = async () => {
       const hasLaunched = await AsyncStorage.getItem("hasLaunched");
       const token = await AsyncStorage.getItem("accessToken");
-      if (!hasLaunched) {
-        console.log("First Time here");
-        router.replace("/welcome");
-        SplashScreen.hideAsync();
-      } else if (token) {
+      if (token) {
         console.log("Token found, navigating to tabs");
         router.replace("/(tabs)");
+        SplashScreen.hideAsync();
+      } else if (!hasLaunched) {
+        console.log("First Time here");
+        router.replace("/welcome");
         SplashScreen.hideAsync();
       } else {
         console.log("No token found, navigating to login");

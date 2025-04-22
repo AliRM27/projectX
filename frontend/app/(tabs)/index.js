@@ -17,16 +17,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import Categorie from "../../components/Categorie.jsx";
 import ProductCard from "../../components/ProductCard.jsx";
+import Shop from "../../components/Shop.jsx";
+import Section from "../../components/Section.jsx";
 
 export default function index() {
   const [queries, setQuery] = useState(["all"]);
 
-  const {
-    data: data,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["main", ...queries],
     queryFn: fetchHome,
     refetchInterval: 1000 * 60 * 5,
@@ -50,6 +47,14 @@ export default function index() {
     return (
       <View style={styles.container}>
         <Text>Error: {error.message}</Text>
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
@@ -99,92 +104,26 @@ export default function index() {
             queries={queries}
           />
         </ScrollView>
-        <View style={styles.category}>
-          <Text style={styles.category.txt}>For you</Text>
-        </View>
-        <ScrollView
-          style={styles.list}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          {isLoading ? (
-            <ProductCard loading={true} />
-          ) : (
-            data["products"].map((item, key) => {
-              return (
-                <ProductCard
-                  key={key}
-                  title={item.title}
-                  category={item.category}
-                  price={item.newPrice}
-                  originalPrice={item.oldPrice}
-                  pickupTime={item.pickUpTime}
-                  rating={4.5}
-                  image={""}
-                  onPress={() => alert("Pressed")}
-                />
-              );
-            })
-          )}
-        </ScrollView>
-        <View style={styles.category}>
-          <Text style={styles.category.txt}>Fashion</Text>
-        </View>
-        <ScrollView
-          style={styles.list}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          {isLoading ? (
-            <ProductCard loading={true} />
-          ) : (
-            data["products"].map((item, key) => {
-              if (item.category !== "fashion") return;
-              return (
-                <ProductCard
-                  key={key}
-                  title={item.title}
-                  category={item.category}
-                  price={item.newPrice}
-                  originalPrice={item.oldPrice}
-                  pickupTime={item.pickUpTime}
-                  rating={4.5}
-                  image={""}
-                  onPress={() => alert("Pressed")}
-                />
-              );
-            })
-          )}
-        </ScrollView>
-        <View style={styles.category}>
-          <Text style={styles.category.txt}>Cosmetic</Text>
-        </View>
-        <ScrollView
-          style={{ marginBottom: 70 }}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          {isLoading ? (
-            <ProductCard loading={true} />
-          ) : (
-            data["products"].map((item, key) => {
-              if (item.category !== "cosmetic") return;
-              return (
-                <ProductCard
-                  key={key}
-                  title={item.title}
-                  category={item.category}
-                  price={item.newPrice}
-                  originalPrice={item.oldPrice}
-                  pickupTime={item.pickUpTime}
-                  rating={4.5}
-                  image={""}
-                  onPress={() => alert("Pressed")}
-                />
-              );
-            })
-          )}
-        </ScrollView>
+        <Section
+          shops={data["shops"]}
+          isLoading={isLoading}
+          isFirst={true}
+          name={"For you"}
+          queries={queries}
+        />
+        <Section
+          shops={data["shops"]}
+          isLoading={isLoading}
+          name={"Fashion"}
+          queries={queries}
+        />
+        <Section
+          shops={data["shops"]}
+          isLoading={isLoading}
+          isLast={true}
+          name={"Cosmetic"}
+          queries={queries}
+        />
       </ScrollView>
     </View>
   );
@@ -212,7 +151,6 @@ const styles = StyleSheet.create({
       fontSize: 20,
     },
   },
-  list: {},
   button: {
     borderWidth: 1,
     padding: 10,

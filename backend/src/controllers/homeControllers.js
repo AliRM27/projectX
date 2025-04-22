@@ -1,6 +1,4 @@
-import Product from "../models/Product.js";
 import Shop from "../models/Shop.js";
-import User from "../models/User.js";
 
 export const getHome = async (req, res) => {
   try {
@@ -11,15 +9,14 @@ export const getHome = async (req, res) => {
     }
 
     const categories = view.split(",");
-    let products;
+    let shops;
 
     if (categories.includes("all")) {
-      products = await Product.find().limit(10);
+      shops = await Shop.find().limit(10);
     } else {
-      products = await Product.find({ category: { $in: categories } });
+      shops = await Shop.find({ category: { $in: categories } });
     }
-
-    return res.status(200).json({ products });
+    return res.status(200).json({ shops });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Server Error" });
