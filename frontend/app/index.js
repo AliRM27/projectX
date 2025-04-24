@@ -6,6 +6,7 @@ import * as SplashScreen from "expo-splash-screen";
 
 const index = () => {
   const [loading, setLoading] = useState(true);
+  const [developMode, setDevelopMode] = useState(true)
 
   useEffect(() => {
     const checkAuth = async () => {

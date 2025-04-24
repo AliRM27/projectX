@@ -1,12 +1,13 @@
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import React from "react";
+import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 
 const Shop = ({ item }) => {
   return (
-    <View style={styles.shop}>
+    <Pressable style={styles.shop} onPress={()=>router.push("../shop/"+item._id)}>
       <Image
-        source={{ uri: item.imageUrl }} // whats the error here?
+        source={{ uri: item.imageUrl }} 
         style={styles.image}
         resizeMode="cover"
       />
@@ -24,7 +25,7 @@ const Shop = ({ item }) => {
           <Text style={styles.rating}>{item.rating.toFixed(1)}</Text>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

@@ -12,13 +12,9 @@ export const getAllProducts = async (req, res) => {
     } else {
       products = await Product.find({ shopId });
       let name = await Shop.findById(shopId);
-      products.push(name);
+      products.push(name.name);
     }
-
-    // if (products.length === 0) {
-    //   return res.status(404).json({ message: "No products available." });
-    // }
-
+    
     res.status(200).json(products);
   } catch (error) {
     console.log(error);

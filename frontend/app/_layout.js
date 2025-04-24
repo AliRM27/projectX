@@ -28,12 +28,13 @@ export default function _layout() {
         <QueryClientProvider client={queryClient}>
           {/* <GlobalDataLoader /> */}
           <UserProvider>
-            <Stack screenOptions={{ headerShown: false }}>
+            <Stack screenOptions={{ headerShown: false, contentStyle:{backgroundColor:"white"} }}>
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="(auth)/register" />
               <Stack.Screen name="(auth)/login" />
               <Stack.Screen name="welcome" />
               <Stack.Screen name="product/[id]" />
+              <Stack.Screen name="shop/[id]" />
             </Stack>
           </UserProvider>
         </QueryClientProvider>
