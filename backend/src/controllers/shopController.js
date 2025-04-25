@@ -25,7 +25,7 @@ export const getAllShops = async (req, res) => {
 // Get product details
 export const getShopDetails = async (req, res) => {
   try {
-    const shop = await Shop.findById(req.params.id);
+    const shop = await Shop.findById(req.params.id).populate("products");
     if (!shop) return res.status(404).json({ message: "Shop not found" });
     res.status(200).json(shop);
   } catch (error) {

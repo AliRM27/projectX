@@ -5,8 +5,8 @@ import { router } from "expo-router";
 
 export let API_URL = "http://192.168.178.46:4444/"; //pc
 API_URL = "http://192.168.68.103:4444/"; //pc Lotuz
-// API_URL = "http://192.168.178.29:4444/"; //mac 
-API_URL = "http://localhost:4444/"; // others
+// API_URL = "http://192.168.178.29:4444/"; //mac
+// API_URL = "http://localhost:4444/"; // others
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -58,7 +58,6 @@ api.interceptors.response.use(
 export const fetchHome = async ({ queryKey }) => {
   try {
     const queries = queryKey.slice(1).join(",");
-    console.log(`${API_URL}home?view=${queries}`)
     const response = await api.get(`${API_URL}home?view=${queries}`);
     return response.data;
   } catch (error) {
@@ -67,7 +66,6 @@ export const fetchHome = async ({ queryKey }) => {
 };
 
 export const fetchProducts = async ({ queryKey }) => {
-  
   try {
     const id = queryKey[1];
     const response = await api.get(API_URL + "products?shopId=" + id);
@@ -80,6 +78,15 @@ export const fetchProducts = async ({ queryKey }) => {
 export const fetchProduct = async (id) => {
   try {
     const response = await api.get(API_URL + "products/" + id);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchShop = async ({ queryKey }) => {
+  try {
+    const response = await api.get(API_URL + "shops/" + queryKey[1]);
     return response.data;
   } catch (error) {
     console.error(error);

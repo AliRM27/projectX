@@ -24,11 +24,20 @@ export default function _layout() {
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-        <StatusBar barStyle="dark-content" />
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
         <QueryClientProvider client={queryClient}>
           {/* <GlobalDataLoader /> */}
           <UserProvider>
-            <Stack screenOptions={{ headerShown: false, contentStyle:{backgroundColor:"white"} }}>
+            <Stack
+              screenOptions={{
+                headerShown: false,
+                contentStyle: { backgroundColor: "white" },
+              }}
+            >
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="(auth)/register" />
               <Stack.Screen name="(auth)/login" />
