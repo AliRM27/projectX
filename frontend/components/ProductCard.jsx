@@ -24,14 +24,7 @@ const SkeletonBox = ({ height, width, style }) => (
 );
 
 const ProductCard = ({
-  image,
-  title,
-  category,
-  pickupTime,
-  price,
-  originalPrice,
-  rating,
-  onPress,
+  bag,
   loading = false, // 👈 Add a loading prop
 }) => {
   if (loading) {
@@ -51,30 +44,33 @@ const ProductCard = ({
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={onPress}
+      
       activeOpacity={0.85}
     >
+      <View style={{ position: "absolute", top: 10, right: 10, zIndex: 1, backgroundColor: "white", borderRadius: 8, padding: 4 }}>
+        <Text>{bag.quantity}+ bags left</Text>
+      </View>
       <Image
         source={require("../assets/examples/nikeShoe.png")}
         style={styles.image}
       />
       <View style={styles.content}>
-        <Text style={styles.title} numberOfLines={1}>
-          {title}
+        <Text style={styles.title} numberOfLines={2}>
+          {bag.title}
         </Text>
-        <Text style={styles.category}>{category}</Text>
-        <Text style={styles.pickup}>🕒 {pickupTime}</Text>
+        <Text style={styles.category}>{bag.category}</Text>
+        <Text style={styles.pickup}>🕒 {bag.pickUpTime}</Text>
 
         <View style={styles.bottomRow}>
           <View style={styles.priceContainer}>
-            <Text style={styles.price}>${price.toFixed(2)}</Text>
-            {originalPrice && (
+            <Text style={styles.price}>${bag.newPrice.toFixed(2)}</Text>
+            {bag.oldPrice && (
               <Text style={styles.originalPrice}>
-                ${originalPrice.toFixed(2)}
+                ${bag.oldPrice.toFixed(2)}
               </Text>
             )}
           </View>
-          {rating !== undefined && (
+          {bag.rating !== undefined && (
             <Text style={styles.rating}>⭐ {rating.toFixed(1)}</Text>
           )}
         </View>
@@ -97,7 +93,8 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
-    width: 300,
+    width: 200,
+    height: 350,
   },
   image: {
     width: "100%",

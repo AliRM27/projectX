@@ -1,9 +1,10 @@
-import { View, Text, Pressable, Image, StyleSheet } from "react-native";
+import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import React from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import ArrowLeft from "../../assets/arrowleft.svg";
 import { useQuery } from "@tanstack/react-query";
 import { fetchShop } from "../../services/api";
+import ProductCard from "../../components/ProductCard";
 
 const shop = () => {
   const { id } = useLocalSearchParams();
@@ -13,36 +14,24 @@ const shop = () => {
     queryFn: fetchShop,
   });
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
   if (error) {
     return <Text>Error: {error.message}</Text>;
   }
 
-  console.log(data.products);
-
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
-      <Image
+      {isLoading ? <ProductCard loading={isLoading}/> : <Image
         style={styles.image}
         source={{ uri: data.imageUrl }}
         resizeMode="cover"
-      />
-      <View>
-        {data.products.map((bag, key) => {
+      />}
+      <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%" }} contentContainerStyle={{ alignItems: "center", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+        {isLoading ? <ProductCard loading={isLoading}/> : data.products.map((bag, key) => {
           return (
-            <Pressable
-              key={key}
-              onPress={() => router.push(`/product/${bag._id}`)}
-            >
-              <Text>{bag.title}</Text>
-              <Text>{bag.oldPrice}</Text>
-              <Text>{bag.newPrice}</Text>
-            </Pressable>
+            <ProductCard bag={bag}/>
           );
         })}
-      </View>
+      </ScrollView>
 
       {/* <Pressable
         onPress={() => router.back()}
