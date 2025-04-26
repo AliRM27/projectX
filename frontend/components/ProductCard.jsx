@@ -8,20 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-
-const SkeletonBox = ({ height, width, style }) => (
-  <View
-    style={[
-      {
-        backgroundColor: "#e5e7eb",
-        borderRadius: 8,
-        height,
-        width,
-      },
-      style,
-    ]}
-  />
-);
+import SkeletonBox from "./Skeleton";
 
 const ProductCard = ({
   bag,
@@ -42,12 +29,18 @@ const ProductCard = ({
   }
 
   return (
-    <TouchableOpacity
-      style={styles.card}
-      
-      activeOpacity={0.85}
-    >
-      <View style={{ position: "absolute", top: 10, right: 10, zIndex: 1, backgroundColor: "white", borderRadius: 8, padding: 4 }}>
+    <TouchableOpacity style={styles.card} activeOpacity={0.85}>
+      <View
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 10,
+          zIndex: 1,
+          backgroundColor: "white",
+          borderRadius: 8,
+          padding: 4,
+        }}
+      >
         <Text>{bag.quantity}+ bags left</Text>
       </View>
       <Image
@@ -93,8 +86,7 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     shadowOffset: { width: 0, height: 4 },
     elevation: 3,
-    width: 200,
-    height: 350,
+    width: 300,
   },
   image: {
     width: "100%",

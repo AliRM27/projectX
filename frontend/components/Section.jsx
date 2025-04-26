@@ -3,42 +3,35 @@ import React from "react";
 import Shop from "./Shop";
 import ProductCard from "./ProductCard";
 
-const Section = ({
-  shops,
-  isLoading,
-  isFirst = false,
-  isLast = false,
-  name,
-  queries,
-}) => {
+const Section = ({ shops, isLoading, isFirst = false, name, queries }) => {
+  if (
+    !isLoading &&
+    !queries.includes(name.toLowerCase()) &&
+    !isFirst &&
+    !queries.includes("all")
+  ) {
+    return null;
+  }
   return (
-    <View
-      style={{ marginTop: isFirst ? 30 : 0, marginBottom: isLast ? 60 : 30 }}
-    >
+    <View style={{ marginTop: isFirst ? 30 : 0, marginBottom: 30 }}>
       <View style={{ marginLeft: 15, marginBottom: 10 }}>
-        <Text style={styles.category.txt}>
-          {queries.includes("all") ||
-          queries.includes(name.toLowerCase()) ||
-          isFirst
-            ? name
-            : ""}
-        </Text>
+        <Text style={styles.category.txt}>{name}</Text>
       </View>
       <ScrollView
         style={{ marginLeft: 15 }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
       >
-        {isLoading ? (
-          <ProductCard loading={true} />
-        ) : (
-          shops.map((item, key) => {
-            if (item.category !== name.toLowerCase() && !isFirst) {
-              return;
-            }
-            return <Shop item={item} key={key} />;
-          })
-        )}
+        {isLoading
+          ? Array.from({ length: 3 }, (_, index) => (
+              <Shop loading={true} key={index} />
+            ))
+          : shops.map((item, key) => {
+              if (item.category !== name.toLowerCase() && !isFirst) {
+                return;
+              }
+              return <Shop item={item} key={key} />;
+            })}
       </ScrollView>
     </View>
   );

@@ -1,102 +1,29 @@
 import {
   View,
   Text,
-  ActivityIndicator,
   StyleSheet,
-  Image,
   ScrollView,
-  TouchableOpacity,
   RefreshControl,
-  Pressable,
-  Dimensions,
 } from "react-native";
-import { Link } from "expo-router";
-import React, { useState, useCallback } from "react";
-import { fetchHome, fetchFavorites } from "../../services/api.js";
-import { useFocusEffect } from "@react-navigation/native";
+import React, { useState } from "react";
+import { fetchHome, fetchCategories } from "../../services/api.js";
 import { useQuery } from "@tanstack/react-query";
-import Categorie from "../../components/Categorie.jsx";
-import ProductCard from "../../components/ProductCard.jsx";
-import Shop from "../../components/Shop.jsx";
+import Category from "../../components/Category.jsx";
 import Section from "../../components/Section.jsx";
-import nike from "../../assets/examples/nikeShoe.png";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { sampleData } from "../../utils/samlpeDatas.js";
 
 export default function index() {
   const [queries, setQuery] = useState(["all"]);
-  const sampleData = {
-    shops: [
-      {
-        _id: "238472348958wsdo347",
-        name: "Nike",
-        category: "fashion",
-        location: {
-          adress: "Lohweg",
-          postalCode: 40547,
-          city: "Duesseldorf",
-          country: "Germany",
-        },
-        contact: "+491794403058",
-        products: [],
-        description: "lshgfksgf",
-        imageUrl: nike,
-        rating: 0,
-      },
-      {
-        _id: "238472348958wsdo347",
-        name: "PeekAClopenburg",
-        category: "fashion",
-        location: {
-          adress: "Koenigsalee",
-          postalCode: 40397,
-          city: "Duesseldorf",
-          country: "Germany",
-        },
-        contact: "+491794403058",
-        products: [],
-        description: "lshgfksgf",
-        imageUrl: nike,
-        rating: 0,
-      },
-      {
-        _id: "23847asd323tewe47",
-        name: "Sephora",
-        category: "cosmetic",
-        location: {
-          adress: "Lohweg",
-          postalCode: 40547,
-          city: "Duesseldorf",
-          country: "Germany",
-        },
-        contact: "+491794403058",
-        products: [],
-        description: "lshgfksgf",
-        imageUrl: nike,
-        rating: 0,
-      },
-      {
-        _id: "238472udsh834347",
-        name: "Muller",
-        category: "toys",
-        location: {
-          adress: "Dielfestr. 47",
-          postalCode: 50219,
-          city: "Siegen",
-          country: "Germany",
-        },
-        contact: "+491794403058",
-        products: [],
-        description: "lshgfksgf",
-        imageUrl: nike,
-        rating: 0,
-      },
-    ],
-  };
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["main", ...queries],
     queryFn: fetchHome,
     refetchInterval: 1000 * 60 * 5,
+  });
+
+  const { data: categories, isLoading: isLoadingCategories } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
   });
 
   const updateQueries = (category) => {
@@ -114,19 +41,7 @@ export default function index() {
   };
 
   if (error) {
-    return (
-      <View style={styles.container}>
-        <Text>Error: {error.message}</Text>
-      </View>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return null;
   }
 
   return (
@@ -150,59 +65,42 @@ export default function index() {
           contentContainerStyle={{ justifyContent: "center" }}
           showsHorizontalScrollIndicator={false}
         >
-          <Categorie
-            name={"all"}
-            extra={{ marginLeft: 30 }}
-            setQuery={updateQueries}
-            queries={queries}
-          />
-          <Categorie
-            name={"fashion"}
-            setQuery={updateQueries}
-            queries={queries}
-          />
-          <Categorie
-            name={"cosmetic"}
-            setQuery={updateQueries}
-            queries={queries}
-          />
-          <Categorie name={"toys"} setQuery={updateQueries} queries={queries} />
-          <Categorie name={"home"} setQuery={updateQueries} queries={queries} />
-          <Categorie
-            name={"accesoirs"}
-            setQuery={updateQueries}
-            queries={queries}
-          />
+          {isLoadingCategories
+            ? Array.from({ length: 5 }, (_, index) => (
+                <Category
+                  isLoading={true}
+                  key={index}
+                  extra={index === 0 ? { marginLeft: 20 } : {}}
+                />
+              ))
+            : categories.map((category, key) => {
+                return (
+                  <Category
+                    name={category.name}
+                    extra={key === 0 ? { marginLeft: 20 } : {}}
+                    setQuery={updateQueries}
+                    queries={queries}
+                    key={key}
+                  />
+                );
+              })}
         </ScrollView>
-
-        {/*Use map to render the Sections*/}
-
-        <Section
-          shops={data ? data["shops"] : sampleData["shops"]}
-          isLoading={isLoading}
-          isFirst={true}
-          name={"For you"}
-          queries={queries}
-        />
-        <Section
-          shops={data ? data["shops"] : sampleData["shops"]}
-          isLoading={isLoading}
-          name={"Fashion"}
-          queries={queries}
-        />
-        <Section
-          shops={data ? data["shops"] : sampleData["shops"]}
-          isLoading={isLoading}
-          name={"Cosmetic"}
-          queries={queries}
-        />
-        <Section
-          shops={data ? data["shops"] : sampleData["shops"]}
-          isLoading={isLoading}
-          isLast={true}
-          name={"Toys"}
-          queries={queries}
-        />
+        {isLoadingCategories || isLoading
+          ? Array.from({ length: 5 }, (_, index) => (
+              <Section isLoading={true} key={index} />
+            ))
+          : categories.map((category, key) => {
+              return (
+                <Section
+                  shops={data ? data["shops"] : sampleData["shops"]}
+                  isFirst={key === 0}
+                  name={category.name}
+                  queries={queries}
+                  key={key}
+                />
+              );
+            })}
+        <View style={{ marginTop: 20 }} />;
       </ScrollView>
     </View>
   );

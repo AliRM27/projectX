@@ -15,22 +15,38 @@ const shop = () => {
   });
 
   if (error) {
-    return <Text>Error: {error.message}</Text>;
+    return (
+      <View>
+        <Text>Error: {error.message}</Text>
+      </View>
+    );
   }
 
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
-      {isLoading ? <ProductCard loading={isLoading}/> : <Image
-        style={styles.image}
-        source={{ uri: data.imageUrl }}
-        resizeMode="cover"
-      />}
-      <ScrollView showsVerticalScrollIndicator={false} style={{ width: "100%" }} contentContainerStyle={{ alignItems: "center", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
-        {isLoading ? <ProductCard loading={isLoading}/> : data.products.map((bag, key) => {
-          return (
-            <ProductCard bag={bag}/>
-          );
-        })}
+      {isLoading ? (
+        <ProductCard loading={true} />
+      ) : (
+        <Image
+          style={styles.image}
+          source={{ uri: data.imageUrl }}
+          resizeMode="cover"
+        />
+      )}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ width: "100%" }}
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
+        {isLoading ? (
+          <ProductCard loading={true} />
+        ) : (
+          data.products.map((bag, key) => {
+            return <ProductCard bag={bag} key={key} />;
+          })
+        )}
       </ScrollView>
 
       {/* <Pressable

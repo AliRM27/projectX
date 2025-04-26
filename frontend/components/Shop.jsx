@@ -2,12 +2,20 @@ import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
+import ProductCard from "./ProductCard";
 
-const Shop = ({ item }) => {
+const Shop = ({ item, loading }) => {
+  if (loading) {
+    return <ProductCard loading={true} />;
+  }
+
   return (
-    <Pressable style={styles.shop} onPress={()=>router.push("../shop/"+item._id)}>
+    <Pressable
+      style={styles.shop}
+      onPress={() => router.push("../shop/" + item._id)}
+    >
       <Image
-        source={{ uri: item.imageUrl }} 
+        source={{ uri: item.imageUrl }}
         style={styles.image}
         resizeMode="cover"
       />
@@ -18,8 +26,6 @@ const Shop = ({ item }) => {
         <Text style={styles.address} numberOfLines={2}>
           {item.location.adress}, {item.location.postalCode}{" "}
         </Text>
-
-        {/* Rating */}
         <View style={styles.ratingContainer}>
           <FontAwesome name="star" size={16} color="#FFD700" />
           <Text style={styles.rating}>{item.rating.toFixed(1)}</Text>

@@ -9,6 +9,7 @@ import homeRouter from "./routes/homeRoutes.js";
 import shopRouter from "./routes/shopRoutes.js";
 import cartRouter from "./routes/cartRoutes.js";
 import orderRouter from "./routes/orderRoutes.js";
+import categoryRouter from "./routes/categorieRoutes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -41,6 +42,8 @@ app.use("/shops", shopRouter);
 app.use("/cart", cartRouter);
 //Orders and Checkout
 app.use("/orders", orderRouter);
+//categories
+app.use("/categories", categoryRouter);
 
 app.listen(PORT, (err) => {
   if (err) {

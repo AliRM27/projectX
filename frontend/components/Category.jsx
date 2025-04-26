@@ -1,8 +1,19 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import React, { useState } from "react";
+import { Text, StyleSheet, Pressable } from "react-native";
+import React from "react";
+import SkeletonBox from "./Skeleton";
 
-const Categorie = ({ name, extra, setQuery, queries }) => {
-  const isActive = queries.includes(name);
+const Categorie = ({ name, extra, setQuery, queries, isLoading }) => {
+  if (isLoading) {
+    return (
+      <SkeletonBox
+        height={40}
+        width={60}
+        style={[styles.container, , styles.inActive, extra]}
+      />
+    );
+  }
+
+  const isActive = queries.includes(name.toLowerCase());
 
   return (
     <Pressable
@@ -12,7 +23,7 @@ const Categorie = ({ name, extra, setQuery, queries }) => {
         extra,
       ]}
       onPress={() => {
-        setQuery(name);
+        setQuery(name.toLowerCase());
       }}
     >
       <Text
@@ -21,7 +32,7 @@ const Categorie = ({ name, extra, setQuery, queries }) => {
           isActive ? styles.active.txt : styles.inActive.txt,
         ]}
       >
-        {name.charAt(0).toUpperCase() + name.slice(1)}
+        {name}
       </Text>
     </Pressable>
   );

@@ -2,11 +2,12 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refreshAccessToken } from "../utils/refreshToken.js";
 import { router } from "expo-router";
+import { sampleData } from "../utils/samlpeDatas.js";
 
 export let API_URL = "http://192.168.178.46:4444/"; //pc
 API_URL = "http://192.168.68.103:4444/"; //pc Lotuz
-API_URL = "http://192.168.1.22:4444/"; //mac
-API_URL = "http://localhost:4444/"; // others
+// API_URL = "http://192.168.1.22:4444/"; //mac
+// API_URL = "http://localhost:4444/"; // others
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -56,7 +57,13 @@ api.interceptors.response.use(
 );
 
 export const fetchHome = async ({ queryKey }) => {
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(sampleData);
+  //   }, 4000);
+  // });
   try {
+    // Simulate a delay
     const queries = queryKey.slice(1).join(",");
     const response = await api.get(`${API_URL}home?view=${queries}`);
     return response.data;
@@ -157,6 +164,20 @@ export const removeFromFavorites = async (productId) => {
     const response = await api.delete(API_URL + "wishlist", {
       data: { productId },
     });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchCategories = async () => {
+  // return new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     resolve(sampleData.categories);
+  //   }, 4000);
+  // });
+  try {
+    const response = await api.get(API_URL + "categories");
     return response.data;
   } catch (error) {
     console.error(error);
