@@ -18,12 +18,29 @@ export default function index() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["main", ...queries],
     queryFn: fetchHome,
-    refetchInterval: 1000 * 60 * 5,
+    // queryFn: () => {
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve(fetchHome({ queryKey: ["main", ...queries] }));
+    //     }, 4000);
+    //   });
+    // },
   });
 
-  const { data: categories, isLoading: isLoadingCategories } = useQuery({
+  const {
+    data: categories,
+    isLoading: isLoadingCategories,
+    refetch: refetchCategories,
+  } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
+    // queryFn: () => {
+    //   return new Promise((resolve) => {
+    //     setTimeout(() => {
+    //       resolve(fetchCategories());
+    //     }, 4000);
+    //   });
+    // },
   });
 
   const updateQueries = (category) => {
@@ -41,7 +58,11 @@ export default function index() {
   };
 
   if (error) {
-    return null;
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Error: {error.message}</Text>
+      </View>
+    );
   }
 
   return (
@@ -57,7 +78,13 @@ export default function index() {
       <ScrollView
         style={isLoading ? { backgroundColor: "transparent" } : {}}
         refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={refetch} />
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => {
+              refetch();
+              refetchCategories();
+            }}
+          />
         }
       >
         <ScrollView
@@ -85,7 +112,7 @@ export default function index() {
                 );
               })}
         </ScrollView>
-        {isLoadingCategories || isLoading
+        {isLoading || isLoadingCategories
           ? Array.from({ length: 5 }, (_, index) => (
               <Section isLoading={true} key={index} />
             ))
@@ -100,7 +127,7 @@ export default function index() {
                 />
               );
             })}
-        <View style={{ marginTop: 20 }} />;
+        <View style={{ marginTop: 20 }} />
       </ScrollView>
     </View>
   );

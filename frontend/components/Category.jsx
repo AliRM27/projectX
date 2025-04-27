@@ -8,7 +8,7 @@ const Categorie = ({ name, extra, setQuery, queries, isLoading }) => {
       <SkeletonBox
         height={40}
         width={60}
-        style={[styles.container, , styles.inActive, extra]}
+        style={[styles.container, styles.inActive, extra]}
       />
     );
   }

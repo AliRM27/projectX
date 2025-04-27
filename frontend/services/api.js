@@ -57,11 +57,6 @@ api.interceptors.response.use(
 );
 
 export const fetchHome = async ({ queryKey }) => {
-  // return new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     resolve(sampleData);
-  //   }, 4000);
-  // });
   try {
     // Simulate a delay
     const queries = queryKey.slice(1).join(",");

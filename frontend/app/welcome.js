@@ -6,7 +6,9 @@ const welcome = () => {
   return (
     <View style={{ flex: 1 }}>
       <Text>Welcome</Text>
-      <Link href={"/(auth)/register"}>Register</Link>
+      <Link href={"/(auth)/register"}>
+        <Text>Register</Text>
+      </Link>
     </View>
   );
 };

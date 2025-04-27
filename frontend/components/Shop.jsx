@@ -1,19 +1,92 @@
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Pressable,
+  Animated,
+} from "react-native";
+import React, { useState } from "react";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
-import ProductCard from "./ProductCard";
+import SkeletonBox from "./Skeleton";
+import Like from "../assets/like.svg";
 
 const Shop = ({ item, loading }) => {
   if (loading) {
-    return <ProductCard loading={true} />;
+    return (
+      <View style={styles.shop}>
+        <SkeletonBox height={160} width="100%" />
+        <View style={{ marginLeft: 10, marginTop: 10 }}>
+          <SkeletonBox
+            height={17}
+            width="60%"
+            style={{ marginBottom: 8, marginTop: 8 }}
+          />
+          <SkeletonBox height={12} width="40%" style={{ marginBottom: 6 }} />
+          <SkeletonBox height={12} width="80%" style={{ marginBottom: 8 }} />
+        </View>
+      </View>
+    );
   }
+
+  const [isLiked, setisLiked] = useState(false);
+  const [rotation, setRotation] = useState(new Animated.Value(0));
+
+  const handlePress = () => {
+    setisLiked(!isLiked);
+    !isLiked &&
+      Animated.timing(rotation, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start(() => {
+        setRotation(new Animated.Value(0)); // Reset rotation after animation
+      });
+  };
+  const rotateInterpolate = rotation.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
 
   return (
     <Pressable
-      style={styles.shop}
+      style={[styles.shop, { opacity: item.products.length === 0 ? 0.6 : 1 }]}
       onPress={() => router.push("../shop/" + item._id)}
+      disabled={item.products.length === 0}
     >
+      <View
+        style={{
+          position: "absolute",
+          top: 10,
+          left: 10,
+          zIndex: 1,
+          backgroundColor: "rgb(255, 252, 177)",
+          padding: 5,
+          borderRadius: 5,
+        }}
+      >
+        <Text>
+          {item.products.length
+            ? item.products.length + " items"
+            : "Not available"}
+        </Text>
+      </View>
+      <Animated.View
+        style={{
+          transform: [{ rotate: rotateInterpolate }],
+          zIndex: 1,
+        }}
+      >
+        <Pressable style={styles.like} onPress={() => handlePress()}>
+          <Like
+            width={25}
+            height={25}
+            stroke="yellow"
+            fill={isLiked ? "rgb(0, 0, 0)" : "transparent"}
+          />
+        </Pressable>
+      </Animated.View>
       <Image
         source={{ uri: item.imageUrl }}
         style={styles.image}
@@ -24,7 +97,8 @@ const Shop = ({ item, loading }) => {
           {item.name}
         </Text>
         <Text style={styles.address} numberOfLines={2}>
-          {item.location.adress}, {item.location.postalCode}{" "}
+          {item.location.adress}, {item.location.postalCode},{" "}
+          {item.location.city}
         </Text>
         <View style={styles.ratingContainer}>
           <FontAwesome name="star" size={16} color="#FFD700" />
@@ -43,6 +117,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
     width: 300,
+    height: 250,
     margin: 10,
     elevation: 3, // Shadow for Android
     shadowColor: "#000", // Shadow for iOS
@@ -75,6 +150,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     marginLeft: 5,
+  },
+  like: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    zIndex: 1,
+    backgroundColor: "white",
+    padding: 5,
+    borderRadius: 50,
   },
 });
 

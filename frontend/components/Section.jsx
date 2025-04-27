@@ -1,7 +1,6 @@
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import React from "react";
 import Shop from "./Shop";
-import ProductCard from "./ProductCard";
 
 const Section = ({ shops, isLoading, isFirst = false, name, queries }) => {
   if (
