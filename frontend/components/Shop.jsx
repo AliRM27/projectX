@@ -63,7 +63,9 @@ const Shop = ({ item, loading }) => {
           zIndex: 1,
           backgroundColor: "rgb(255, 252, 177)",
           padding: 5,
-          borderRadius: 5,
+          borderRadius: 15,
+          minWidth: 80,
+          alignItems: "center",
         }}
       >
         <Text>
