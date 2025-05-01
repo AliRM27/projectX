@@ -11,6 +11,7 @@ import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import SkeletonBox from "./Skeleton";
 import Like from "../assets/like.svg";
+import { useFavorites } from "../context/favoriteContext";
 
 const Shop = ({ item, loading }) => {
   if (loading) {
@@ -30,12 +31,13 @@ const Shop = ({ item, loading }) => {
     );
   }
 
-  const [isLiked, setisLiked] = useState(false);
   const [rotation, setRotation] = useState(new Animated.Value(0));
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const isShopFavorite = isFavorite(item._id.toString());
 
   const handlePress = () => {
-    setisLiked(!isLiked);
-    !isLiked &&
+    toggleFavorite(item._id.toString());
+    !isShopFavorite &&
       Animated.timing(rotation, {
         toValue: 1,
         duration: 1000,
@@ -85,7 +87,7 @@ const Shop = ({ item, loading }) => {
             width={25}
             height={25}
             stroke="yellow"
-            fill={isLiked ? "rgb(0, 0, 0)" : "transparent"}
+            fill={isShopFavorite ? "rgb(0, 0, 0)" : "transparent"}
           />
         </Pressable>
       </Animated.View>

@@ -86,6 +86,15 @@ export const fetchProduct = async (id) => {
   }
 };
 
+export const fetchShops = async () => {
+  try {
+    const response = await api.get(API_URL + "shops");
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const fetchShop = async ({ queryKey }) => {
   try {
     const response = await api.get(API_URL + "shops/" + queryKey[1]);
@@ -145,19 +154,19 @@ export const fetchFavorites = async () => {
   }
 };
 
-export const addToFavorites = async (productId) => {
+export const addToFavorites = async (shopId) => {
   try {
-    const response = await api.post(API_URL + "wishlist", { productId });
+    const response = await api.post(API_URL + "wishlist", { shopId });
     return response.data;
   } catch (error) {
     console.error(error);
   }
 };
 
-export const removeFromFavorites = async (productId) => {
+export const removeFromFavorites = async (shopId) => {
   try {
     const response = await api.delete(API_URL + "wishlist", {
-      data: { productId },
+      data: { shopId },
     });
     return response.data;
   } catch (error) {

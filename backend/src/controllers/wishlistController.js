@@ -5,7 +5,7 @@ export const getWishList = async (req, res) => {
   try {
     const userId = req.userId;
     const wishList = await WishList.findOne({ user: userId }).populate(
-      "items.product"
+      "items.shop"
     );
     if (!wishList) {
       return res.status(404).json({
@@ -24,7 +24,7 @@ export const getWishList = async (req, res) => {
 export const addToWishList = async (req, res) => {
   try {
     const wishList = await WishList.findOne({ user: req.userId }).populate(
-      "items.product"
+      "items.shop"
     );
 
     if (!wishList) {
@@ -34,35 +34,35 @@ export const addToWishList = async (req, res) => {
     }
 
     wishList.items.forEach((item) => {
-      if (item.product._id.toString() === req.body.productId) {
+      if (item.shop._id.toString() === req.body.shopId) {
         return res.status(400).json({
-          message: "Product already in wishlist",
+          message: "Shop already in wishlist",
         });
       }
     });
 
     wishList.items.push({
-      product: req.body.productId,
+      shop: req.body.shopId,
     });
 
     await wishList.save();
 
     res.status(200).json({
-      message: "Product added to wishlist",
+      message: "Shop added to wishlist",
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "Failed to add product to wishlist",
+      message: "Failed to add shop to wishlist",
     });
   }
 };
 
 export const removeFromWishList = async (req, res) => {
   try {
-    const { productId } = req.body;
+    const { shopId } = req.body;
     const wishList = await WishList.findOne({ user: req.userId }).populate(
-      "items.product"
+      "items.shop"
     );
 
     if (!wishList) {
@@ -72,22 +72,22 @@ export const removeFromWishList = async (req, res) => {
     }
 
     wishList.items.forEach(async (item) => {
-      if (item.product._id.toString() === productId) {
+      if (item.shop._id.toString() === shopId) {
         await wishList.updateOne({
           $pull: {
-            items: { product: new mongoose.Types.ObjectId(productId) },
+            items: { shop: new mongoose.Types.ObjectId(shopId) },
           },
         });
       }
     });
 
     return res.status(200).json({
-      message: "Product removed from wishlist",
+      message: "Shop removed from wishlist",
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "Failed to remove product from wishlist",
+      message: "Failed to remove shop from wishlist",
     });
   }
 };

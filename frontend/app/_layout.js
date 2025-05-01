@@ -3,7 +3,7 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
-import { UserProvider } from "../context/favoriteContext";
+import { FavoritesProvider } from "../context/favoriteContext";
 // import GlobalDataLoader from "../components/GlobalLoader";
 
 SplashScreen.preventAutoHideAsync();
@@ -31,7 +31,7 @@ export default function _layout() {
         />
         <QueryClientProvider client={queryClient}>
           {/* <GlobalDataLoader /> */}
-          <UserProvider>
+          <FavoritesProvider>
             <Stack
               screenOptions={{
                 headerShown: false,
@@ -45,7 +45,7 @@ export default function _layout() {
               <Stack.Screen name="product/[id]" />
               <Stack.Screen name="shop/[id]" />
             </Stack>
-          </UserProvider>
+          </FavoritesProvider>
         </QueryClientProvider>
       </SafeAreaView>
     </SafeAreaProvider>

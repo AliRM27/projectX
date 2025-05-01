@@ -8,9 +8,9 @@ const wishListSchema = new mongoose.Schema({
   },
   items: [
     {
-      product: {
+      shop: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product", // Links to a product
+        ref: "Shop", // Links to a product
         required: true,
       },
       dateAdded: {
