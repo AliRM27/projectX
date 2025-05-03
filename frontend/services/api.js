@@ -86,9 +86,11 @@ export const fetchProduct = async (id) => {
   }
 };
 
-export const fetchShops = async () => {
+export const fetchShops = async ({ queryKey }) => {
   try {
-    const response = await api.get(API_URL + "shops");
+    const response = await api.get(
+      API_URL + "shops" + (queryKey[1] ? "?name=" + queryKey[1].trim() : "")
+    );
     return response.data;
   } catch (error) {
     console.error(error);

@@ -8,11 +8,13 @@ export const getAllShops = async (req, res) => {
     if (!name) {
       shops = await Shop.find();
     } else {
-      shops = await Shop.find({ name });
+      // Use regex for case-insensitive search
+      const regex = new RegExp(name, "i");
+      shops = await Shop.find({ name: { $regex: regex } });
     }
 
     if (shops.length === 0) {
-      return res.status(404).json({ message: "No shops available." });
+      return res.status(204).json({ message: "No shops found" });
     }
 
     res.status(200).json(shops);

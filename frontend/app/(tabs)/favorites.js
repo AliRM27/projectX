@@ -1,9 +1,17 @@
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { useFavorites } from "../../context/favoriteContext";
 import { useQuery } from "@tanstack/react-query";
 import { fetchFavorites, fetchShops } from "../../services/api";
 import Shop from "../../components/Shop";
+import { router } from "expo-router";
 
 const favorites = () => {
   const { favorites } = useFavorites();
@@ -17,6 +25,27 @@ const favorites = () => {
     return (
       <View style={styles.container}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>No favorites</Text>
+        <TouchableOpacity
+          style={{
+            marginTop: 20,
+            borderWidth: 1,
+            padding: 10,
+            borderRadius: 15,
+          }}
+          onPress={() => {
+            // Navigate to the shops screen
+            router.push("/(tabs)");
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 20,
+              textAlign: "center",
+            }}
+          >
+            Find Shops
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -35,8 +64,18 @@ const favorites = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Your Favorites:</Text>
-      <ScrollView>
+      <Text
+        style={{
+          width: "100%",
+          marginTop: 20,
+          marginLeft: 40,
+          fontSize: 25,
+          fontWeight: "bold",
+        }}
+      >
+        Your Favorites:
+      </Text>
+      <ScrollView style={{ marginTop: 30 }}>
         {favoriteShops.map((shop, key) => (
           <Shop key={key} item={shop} />
         ))}

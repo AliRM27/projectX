@@ -66,7 +66,7 @@ export default function index() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
       <View
         style={
           (styles.container,
@@ -134,13 +134,6 @@ export default function index() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    borderWidth: 0,
-    borderColor: "black",
-    width: "100%",
-  },
   heading: {
     fontFamily: "sans-serif",
     fontWeight: "bold",
