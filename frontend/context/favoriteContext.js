@@ -5,6 +5,7 @@ import {
   removeFromFavorites,
   addToFavorites,
 } from "../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const FavoritesContext = createContext();
 
@@ -12,7 +13,14 @@ export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    loadFavorites();
+    const checkAuthAndLoad = async () => {
+      const token = await AsyncStorage.getItem("accessToken");
+      if (token) {
+        loadFavorites();
+      }
+    };
+
+    checkAuthAndLoad();
   }, []);
 
   const loadFavorites = async () => {

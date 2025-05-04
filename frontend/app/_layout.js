@@ -38,6 +38,7 @@ export default function _layout() {
                 contentStyle: { backgroundColor: "white" },
               }}
             >
+              <Stack.Screen name="index" />
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="(auth)/register" />
               <Stack.Screen name="(auth)/login" />

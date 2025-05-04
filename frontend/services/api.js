@@ -3,11 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refreshAccessToken } from "../utils/refreshToken.js";
 import { router } from "expo-router";
 import { sampleData } from "../utils/samlpeDatas.js";
-
-export let API_URL = "http://192.168.178.46:4444/"; //pc
-API_URL = "http://192.168.68.103:4444/"; //pc Lotuz
-// API_URL = "http://192.168.1.22:4444/"; //mac
-// API_URL = "http://localhost:4444/"; // others
+import { API_URL } from "./config.js";
 
 export const api = axios.create({
   baseURL: API_URL,
@@ -60,7 +56,7 @@ export const fetchHome = async ({ queryKey }) => {
   try {
     // Simulate a delay
     const queries = queryKey.slice(1).join(",");
-    const response = await api.get(`${API_URL}home?view=${queries}`);
+    const response = await api.get(`home?view=${queries}`);
     return response.data;
   } catch (error) {
     console.error(error, "Server error");
@@ -70,7 +66,7 @@ export const fetchHome = async ({ queryKey }) => {
 export const fetchProducts = async ({ queryKey }) => {
   try {
     const id = queryKey[1];
-    const response = await api.get(API_URL + "products?shopId=" + id);
+    const response = await api.get("products?shopId=" + id);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -79,7 +75,7 @@ export const fetchProducts = async ({ queryKey }) => {
 
 export const fetchProduct = async (id) => {
   try {
-    const response = await api.get(API_URL + "products/" + id);
+    const response = await api.get("products/" + id);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -89,7 +85,7 @@ export const fetchProduct = async (id) => {
 export const fetchShops = async ({ queryKey }) => {
   try {
     const response = await api.get(
-      API_URL + "shops" + (queryKey[1] ? "?name=" + queryKey[1].trim() : "")
+      "shops" + (queryKey[1] ? "?name=" + queryKey[1].trim() : "")
     );
     return response.data;
   } catch (error) {
@@ -99,7 +95,7 @@ export const fetchShops = async ({ queryKey }) => {
 
 export const fetchShop = async ({ queryKey }) => {
   try {
-    const response = await api.get(API_URL + "shops/" + queryKey[1]);
+    const response = await api.get("shops/" + queryKey[1]);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -108,7 +104,7 @@ export const fetchShop = async ({ queryKey }) => {
 
 export const fetchUser = async () => {
   try {
-    const response = await api.get(API_URL + "user");
+    const response = await api.get("user");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -117,7 +113,7 @@ export const fetchUser = async () => {
 
 export const fetchCart = async () => {
   try {
-    const response = await api.get(API_URL + "cart");
+    const response = await api.get("cart");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -126,7 +122,7 @@ export const fetchCart = async () => {
 
 export const addToCart = async (productId, quantity) => {
   try {
-    const response = await api.post(API_URL + "cart/add", {
+    const response = await api.post("cart/add", {
       productId,
       quantity,
     });
@@ -138,7 +134,7 @@ export const addToCart = async (productId, quantity) => {
 
 export const removeFromCart = async (productId) => {
   try {
-    const response = await api.delete(API_URL + "cart/remove", {
+    const response = await api.delete("cart/remove", {
       data: { productId },
     });
     return response.data;
@@ -149,7 +145,7 @@ export const removeFromCart = async (productId) => {
 
 export const fetchFavorites = async () => {
   try {
-    const response = await api.get(API_URL + "wishlist");
+    const response = await api.get("wishlist");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -158,7 +154,7 @@ export const fetchFavorites = async () => {
 
 export const addToFavorites = async (shopId) => {
   try {
-    const response = await api.post(API_URL + "wishlist", { shopId });
+    const response = await api.post("wishlist", { shopId });
     return response.data;
   } catch (error) {
     console.error(error);
@@ -167,7 +163,7 @@ export const addToFavorites = async (shopId) => {
 
 export const removeFromFavorites = async (shopId) => {
   try {
-    const response = await api.delete(API_URL + "wishlist", {
+    const response = await api.delete("wishlist", {
       data: { shopId },
     });
     return response.data;
@@ -183,7 +179,7 @@ export const fetchCategories = async () => {
   //   }, 4000);
   // });
   try {
-    const response = await api.get(API_URL + "categories");
+    const response = await api.get("categories");
     return response.data;
   } catch (error) {
     console.error(error);

@@ -1,11 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { api, API_URL } from "./api.js";
+import { api } from "./api.js";
 import { router } from "expo-router";
 
 // Register API
 export const registerUser = async (userData) => {
   try {
-    const response = await api.post(API_URL + "auth/register", userData);
+    const response = await api.post("auth/register", userData);
 
     await AsyncStorage.setItem("hasLaunched", "true");
     return response.data;
@@ -18,7 +18,7 @@ export const registerUser = async (userData) => {
 // Login API
 export const loginUser = async (userData) => {
   try {
-    const response = await api.post(API_URL + "auth/login", userData);
+    const response = await api.post("auth/login", userData);
     const { accessToken, refreshToken } = response.data;
 
     if (accessToken && refreshToken) {

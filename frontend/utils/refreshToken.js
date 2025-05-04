@@ -1,7 +1,6 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const API_BASE_URL = "http://192.168.68.103:4444/";
+import { API_URL } from "../services/config";
 
 export const refreshAccessToken = async () => {
   try {
@@ -9,7 +8,7 @@ export const refreshAccessToken = async () => {
 
     if (!refreshToken) throw new Error("No refresh token available");
 
-    const response = await axios.post(`${API_BASE_URL}auth/refresh-token`, {
+    const response = await axios.post(`${API_URL}auth/refresh-token`, {
       refreshToken,
     });
 

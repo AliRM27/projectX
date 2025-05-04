@@ -1,14 +1,14 @@
-import { View, Text } from "react-native";
-import { Link } from "expo-router";
+import { View, Text, Pressable } from "react-native";
+import { router } from "expo-router";
 import React from "react";
 
 const welcome = () => {
   return (
     <View style={{ flex: 1 }}>
       <Text>Welcome</Text>
-      <Link href={"/(auth)/register"}>
+      <Pressable onPress={() => router.replace("(auth)/register")}>
         <Text>Register</Text>
-      </Link>
+      </Pressable>
     </View>
   );
 };

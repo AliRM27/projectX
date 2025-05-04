@@ -6,19 +6,18 @@ import * as SplashScreen from "expo-splash-screen";
 
 const index = () => {
   const [loading, setLoading] = useState(true);
-  const [developMode, setDevelopMode] = useState(true)
 
   useEffect(() => {
     const checkAuth = async () => {
       const hasLaunched = await AsyncStorage.getItem("hasLaunched");
       const token = await AsyncStorage.getItem("accessToken");
-      if (token) {
-        console.log("Token found, navigating to tabs");
-        router.replace("/(tabs)");
-        SplashScreen.hideAsync();
-      } else if (!hasLaunched) {
+      if (!hasLaunched) {
         console.log("First Time here");
         router.replace("/welcome");
+        SplashScreen.hideAsync();
+      } else if (token) {
+        console.log("Token found, navigating to tabs");
+        router.replace("/(tabs)");
         SplashScreen.hideAsync();
       } else {
         console.log("No token found, navigating to login");
