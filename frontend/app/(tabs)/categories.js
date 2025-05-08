@@ -22,12 +22,12 @@ import Filter from "../../assets/filter.svg";
 const categories = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisibale, setIsVisibale] = useState(false);
-  const [backgroundColor, setbackgroundColor] = useState("");
   const [value, setValue] = useState(false);
+  const [value2, setValue2] = useState(false);
 
   // Fetch shops based on the search query
   const { data, isLoading, error } = useQuery({
-    queryKey: ["shops", searchQuery],
+    queryKey: ["shops", searchQuery, value, value2],
     queryFn: fetchShops,
     enabled: true, // Always fetch, even when the search query is empty
   });
@@ -55,9 +55,6 @@ const categories = () => {
         <TouchableOpacity
           onPress={() => {
             setIsVisibale(true);
-            setTimeout(() => {
-              setbackgroundColor("rgba(0, 0, 0, 0.44)");
-            }, 400);
           }}
           activeOpacity={0.5}
           style={styles.filter}
@@ -97,7 +94,6 @@ const categories = () => {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor,
           }}
         >
           <View style={styles.modalContent}>
@@ -114,8 +110,22 @@ const categories = () => {
                 gap: 30,
               }}
             >
-              <Text style={styles.txt}>Pick Up today</Text>
+              <Text style={styles.txt}>Show sold shops</Text>
               <Switch value={value} onValueChange={() => setValue((p) => !p)} />
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 30,
+              }}
+            >
+              <Text style={styles.txt}>Pick Up today</Text>
+              <Switch
+                value={value2}
+                onValueChange={() => setValue2((p) => !p)}
+              />
             </View>
             <View
               style={{
@@ -148,7 +158,6 @@ const categories = () => {
                 style={[styles.button, { borderColor: "grey" }]}
                 onPress={() => {
                   setIsVisibale(false);
-                  setbackgroundColor("");
                 }}
               >
                 <Text style={{ textAlign: "center", fontSize: 17 }}>Clear</Text>
@@ -157,7 +166,6 @@ const categories = () => {
                 style={[styles.button, { backgroundColor: "black" }]}
                 onPress={() => {
                   setIsVisibale(false);
-                  setbackgroundColor("");
                 }}
               >
                 <Text
@@ -217,8 +225,10 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
+    borderColor: "black",
+    borderWidth: 2,
     padding: 22,
-    gap: 40,
+    gap: 30,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     minHeight: "50%",

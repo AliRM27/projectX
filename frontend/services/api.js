@@ -85,7 +85,7 @@ export const fetchProduct = async (id) => {
 export const fetchShops = async ({ queryKey }) => {
   try {
     const response = await api.get(
-      "shops" + (queryKey[1] ? "?name=" + queryKey[1].trim() : "")
+      `shops?name=${queryKey[1].trim()}&showSold=${queryKey[2]}`
     );
     return response.data;
   } catch (error) {
