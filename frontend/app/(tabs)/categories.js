@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
   Button,
   Modal,
   Switch,
+  RefreshControl,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import { useQuery } from "@tanstack/react-query";
@@ -18,6 +19,7 @@ import { fetchShops } from "../../services/api";
 import Shop from "../../components/Shop";
 import Search from "../../assets/search.svg";
 import Filter from "../../assets/filter.svg";
+import Close from "../../assets/close.svg";
 
 const categories = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -26,11 +28,20 @@ const categories = () => {
   const [value2, setValue2] = useState(false);
 
   // Fetch shops based on the search query
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["shops", searchQuery, value, value2],
-    queryFn: fetchShops,
+  const { data, isLoading, error, isFetching, refetch } = useQuery({
+    queryKey: ["shops", searchQuery],
+    queryFn: ({ queryKey }) => {
+      const [, searchQuery] = queryKey;
+      return fetchShops({ searchQuery, value, value2 });
+    },
     enabled: true, // Always fetch, even when the search query is empty
   });
+
+  //   useEffect(() => {
+  //   if (!searchQuery) {
+  //     // Maybe reset data, or let the UI show "No results" naturally
+  //   }
+  // }, [searchQuery]);
 
   return (
     <View style={styles.container}>
@@ -75,6 +86,10 @@ const categories = () => {
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => <Shop item={item} />}
           contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={isFetching} onRefresh={refetch} />
+          }
         />
       ) : (
         !isLoading && (
@@ -97,6 +112,12 @@ const categories = () => {
           }}
         >
           <View style={styles.modalContent}>
+            <Pressable
+              onPress={() => setIsVisibale(false)}
+              style={{ position: "absolute", top: 20, right: 30, zIndex: 1 }}
+            >
+              <Close width={40} height={40} />
+            </Pressable>
             <Text
               style={{ fontSize: 25, fontWeight: "bold", textAlign: "center" }}
             >
@@ -111,9 +132,9 @@ const categories = () => {
               }}
             >
               <Text style={styles.txt}>Show sold shops</Text>
-              <Switch value={value} onValueChange={() => setValue((p) => !p)} />
+              <Switch value={value} onValueChange={setValue} />
             </View>
-            <View
+            {/* <View
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
@@ -122,11 +143,8 @@ const categories = () => {
               }}
             >
               <Text style={styles.txt}>Pick Up today</Text>
-              <Switch
-                value={value2}
-                onValueChange={() => setValue2((p) => !p)}
-              />
-            </View>
+              <Switch value={value2} onValueChange={setValue2} />
+            </View> */}
             <View
               style={{
                 justifyContent: "center",
@@ -157,7 +175,11 @@ const categories = () => {
               <TouchableOpacity
                 style={[styles.button, { borderColor: "grey" }]}
                 onPress={() => {
+                  setValue(false);
                   setIsVisibale(false);
+                  setTimeout(() => {
+                    refetch();
+                  }, 0);
                 }}
               >
                 <Text style={{ textAlign: "center", fontSize: 17 }}>Clear</Text>
@@ -166,12 +188,13 @@ const categories = () => {
                 style={[styles.button, { backgroundColor: "black" }]}
                 onPress={() => {
                   setIsVisibale(false);
+                  refetch();
                 }}
               >
                 <Text
                   style={{ color: "white", textAlign: "center", fontSize: 17 }}
                 >
-                  Accept
+                  Apply
                 </Text>
               </TouchableOpacity>
             </View>
@@ -196,7 +219,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 46,
     fontSize: 16,
     width: 270,
-    // backgroundColor: "#f9f9f9",
   },
   list: {
     paddingBottom: 16,

@@ -3,35 +3,26 @@ import Shop from "../models/Shop.js";
 export const getAllShops = async (req, res) => {
   try {
     const { name, showSold } = req.query;
-    let shops;
 
-    if (!name && showSold) {
-      // No name, no showSold → only shops with products
-      console.log("TETS");
-      // shops = await Shop.find({ products: { $exists: false } });
-    } else if (name && !showSold) {
-      console.log("TETS2");
-      // Name provided, showSold false → match name + has products
+    let shops = [];
+
+    if (!name && showSold === "false") {
+      shops = await Shop.find({
+        products: { $exists: true, $not: { $size: 0 } },
+      });
+    } else if (name && showSold === "false") {
       const regex = new RegExp(name, "i");
       shops = await Shop.find({
         name: { $regex: regex },
-        products: { $exists: true, $ne: [] },
+        products: { $exists: true, $not: { $size: 0 } },
       });
-    } else if (!name && showSold) {
-      // No name, showSold true → all shops
+    } else if (!name && showSold === "true") {
       shops = await Shop.find();
     } else {
-      // Name and showSold both true → match name + empty products
-      console.log("TETS4");
       const regex = new RegExp(name, "i");
       shops = await Shop.find({
-        name: { $regex: regex },
-        $or: [{ products: { $exists: false } }, { products: { $size: 0 } }],
+        $or: [{ name: { $regex: regex } }],
       });
-    }
-
-    if (shops.length === 0) {
-      return res.status(204).json({ message: "No shops found" });
     }
 
     res.status(200).json(shops);

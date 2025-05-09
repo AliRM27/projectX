@@ -82,14 +82,19 @@ export const fetchProduct = async (id) => {
   }
 };
 
-export const fetchShops = async ({ queryKey }) => {
+export const fetchShops = async ({
+  searchQuery = "",
+  value = "false",
+  value2 = "",
+}) => {
   try {
     const response = await api.get(
-      `shops?name=${queryKey[1].trim()}&showSold=${queryKey[2]}`
+      `shops?name=${searchQuery.trim()}&showSold=${value}`
     );
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
