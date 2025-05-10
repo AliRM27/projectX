@@ -1,27 +1,32 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Alert } from "react-native";
 import {
   fetchFavorites,
   removeFromFavorites,
   addToFavorites,
 } from "../services/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useUser } from "./userContext";
 
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
   const [favorites, setFavorites] = useState([]);
+  const { user } = useUser(); // Access logged-in user
 
+  // Load favorites when user logs in
   useEffect(() => {
-    const checkAuthAndLoad = async () => {
-      const token = await AsyncStorage.getItem("accessToken");
-      if (token) {
-        loadFavorites();
+    const load = async () => {
+      if (user && user.id) {
+        console.log("User logged in, loading favorites...");
+        await loadFavorites();
+      } else {
+        console.log("No user, clearing favorites.");
+        setFavorites([]); // Clear on logout
       }
     };
 
-    checkAuthAndLoad();
-  }, []);
+    load();
+  }, [user]); // Runs whenever user changes
 
   const loadFavorites = async () => {
     try {

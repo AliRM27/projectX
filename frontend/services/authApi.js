@@ -16,7 +16,7 @@ export const registerUser = async (userData) => {
 };
 
 // Login API
-export const loginUser = async (userData) => {
+export const loginUser = async (userData, setUser) => {
   try {
     const response = await api.post("auth/login", userData);
     const { accessToken, refreshToken } = response.data;
@@ -26,6 +26,8 @@ export const loginUser = async (userData) => {
       await AsyncStorage.setItem("refreshToken", refreshToken);
     }
 
+    setUser({ id: response.data.user.id, name: response.data.user.fullName });
+
     return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Login failed";
@@ -33,10 +35,11 @@ export const loginUser = async (userData) => {
 };
 
 // Logout API (optional)
-export const logoutUser = async () => {
+export const logoutUser = async (setUser) => {
   try {
     await AsyncStorage.removeItem("accessToken");
     await AsyncStorage.removeItem("refreshToken");
+    setUser(null);
     router.replace("login");
   } catch (error) {
     console.error(error);

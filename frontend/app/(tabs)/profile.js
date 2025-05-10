@@ -3,14 +3,16 @@ import React, { useState, useCallback } from "react";
 import { fetchUser } from "../../services/api.js";
 import { useFocusEffect } from "expo-router";
 import { logoutUser } from "../../services/authApi.js";
+import { useUser } from "../../context/userContext.js";
 
 export default function profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { setUser: setUserContext } = useUser();
 
   const logOut = async () => {
     try {
-      await logoutUser();
+      await logoutUser(setUserContext);
     } catch (error) {
       console.error("Failed to logout");
     }

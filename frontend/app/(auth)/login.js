@@ -9,12 +9,14 @@ import {
 } from "react-native";
 import { loginUser } from "../../services/authApi.js"; // Import login function
 import { router } from "expo-router";
+import { useUser } from "../../context/userContext.js";
 
 const LoginScreen = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isError, setIsError] = useState(false);
+  const { setUser } = useUser();
 
   const handleChange = (key, value) => {
     setForm({ ...form, [key]: value });
@@ -23,7 +25,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const response = await loginUser(form);
+      const response = await loginUser(form, setUser);
       setError(response.message);
       router.replace("../(tabs)");
     } catch (error) {
