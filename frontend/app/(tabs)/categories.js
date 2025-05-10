@@ -13,7 +13,7 @@ import {
   Switch,
   RefreshControl,
 } from "react-native";
-import Slider from "@react-native-community/slider";
+import { Slider } from "@miblanchard/react-native-slider";
 import { useQuery } from "@tanstack/react-query";
 import { fetchShops } from "../../services/api";
 import Shop from "../../components/Shop";
@@ -25,17 +25,33 @@ const categories = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisibale, setIsVisibale] = useState(false);
   const [value, setValue] = useState(false);
-  const [value2, setValue2] = useState(false);
+  // const [value2, setValue2] = useState(false);
+  const [range, setRange] = useState([0, 60]);
+  const [sliderWidth, setSliderWidth] = useState(0);
 
-  // Fetch shops based on the search query
   const { data, isLoading, error, isFetching, refetch } = useQuery({
     queryKey: ["shops", searchQuery],
     queryFn: ({ queryKey }) => {
       const [, searchQuery] = queryKey;
-      return fetchShops({ searchQuery, value, value2 });
+      return fetchShops({ searchQuery, value, range });
     },
-    enabled: true, // Always fetch, even when the search query is empty
+    enabled: true,
   });
+
+  const handleLayout = (event) => {
+    setSliderWidth(event.nativeEvent.layout.width);
+  };
+
+  const getThumbLeft = (value) => {
+    const thumbSize = 18;
+    const labelWidth = 45;
+    const min = 0;
+    const max = 100;
+    const percent = (value - min) / (max - min);
+    const usableWidth = sliderWidth - thumbSize;
+    const thumbCenterX = percent * usableWidth + thumbSize / 2;
+    return thumbCenterX - labelWidth / 2;
+  };
 
   //   useEffect(() => {
   //   if (!searchQuery) {
@@ -147,57 +163,86 @@ const categories = () => {
             </View> */}
             <View
               style={{
+                marginLeft: 10,
+                marginRight: 10,
+                alignItems: "stretch",
                 justifyContent: "center",
-                alignItems: "center",
-                gap: 15,
               }}
             >
-              <Text style={styles.txt}>Price</Text>
-              <Slider
-                maximumValue={10}
-                minimumValue={0}
-                step={1}
-                style={{ width: 300 }}
-                thumbTintColor="black"
-                maximumTrackTintColor="rgb(230, 230, 230)"
-                minimumTrackTintColor="black"
-                aria-labelledby="hi"
-              />
+              <View onLayout={handleLayout} style={styles.sliderWrapper}>
+                {/* Floating Labels */}
+                {sliderWidth > 0 && (
+                  <>
+                    <Text
+                      style={[
+                        styles.thumbLabel,
+                        { left: getThumbLeft(range[0]) },
+                      ]}
+                    >
+                      {range[0] + "€"}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.thumbLabel,
+                        { left: getThumbLeft(range[1]) },
+                      ]}
+                    >
+                      {range[1] === 100 ? "100+€" : range[1] + "€"}
+                    </Text>
+                  </>
+                )}
+                <Text style={styles.txt}>Price</Text>
+                <Slider
+                  value={range}
+                  onValueChange={(values) => setRange(values)}
+                  minimumValue={0}
+                  maximumValue={100}
+                  step={15}
+                  minimumTrackTintColor="black"
+                  maximumTrackTintColor="lightgrey"
+                  thumbTintColor="black"
+                  trackStyle={styles.track}
+                  thumbStyle={styles.thumb}
+                />
+              </View>
             </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: 20,
-              }}
-            >
-              <TouchableOpacity
-                style={[styles.button, { borderColor: "grey" }]}
-                onPress={() => {
-                  setValue(false);
-                  setIsVisibale(false);
-                  setTimeout(() => {
-                    refetch();
-                  }, 0);
-                }}
-              >
-                <Text style={{ textAlign: "center", fontSize: 17 }}>Clear</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: "black" }]}
-                onPress={() => {
-                  setIsVisibale(false);
+          </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+              bottom: 30,
+              gap: 20,
+              width: "100%",
+            }}
+          >
+            <TouchableOpacity
+              style={[styles.button, { borderColor: "grey" }]}
+              onPress={() => {
+                setValue(false);
+                setIsVisibale(false);
+                setTimeout(() => {
                   refetch();
-                }}
+                }, 0);
+              }}
+            >
+              <Text style={{ textAlign: "center", fontSize: 17 }}>Clear</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: "black" }]}
+              onPress={() => {
+                setIsVisibale(false);
+                refetch();
+              }}
+            >
+              <Text
+                style={{ color: "white", textAlign: "center", fontSize: 17 }}
               >
-                <Text
-                  style={{ color: "white", textAlign: "center", fontSize: 17 }}
-                >
-                  Apply
-                </Text>
-              </TouchableOpacity>
-            </View>
+                Apply
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -249,14 +294,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "black",
     borderWidth: 2,
-    padding: 22,
-    gap: 30,
+    padding: 30,
+    gap: 50,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     minHeight: "50%",
   },
   txt: {
-    fontSize: 15,
+    textAlign: "center",
+    fontSize: 16,
     color: "grey",
   },
   button: {
@@ -266,6 +312,28 @@ const styles = StyleSheet.create({
     width: 150,
     height: 60,
     justifyContent: "center",
+  },
+  track: {
+    height: 3,
+    borderRadius: 3,
+  },
+  thumb: {
+    height: 16,
+    width: 18,
+    borderRadius: 4,
+    backgroundColor: "black",
+  },
+  sliderWrapper: {
+    height: 20,
+    justifyContent: "center",
+  },
+  thumbLabel: {
+    position: "absolute",
+    top: 50,
+    fontSize: 14,
+    color: "black",
+    textAlign: "center",
+    width: 45,
   },
 });
 

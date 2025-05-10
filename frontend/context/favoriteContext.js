@@ -16,7 +16,7 @@ export const FavoritesProvider = ({ children }) => {
   // Load favorites when user logs in
   useEffect(() => {
     const load = async () => {
-      if (user && user.id) {
+      if (user && user._id) {
         console.log("User logged in, loading favorites...");
         await loadFavorites();
       } else {

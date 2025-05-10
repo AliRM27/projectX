@@ -26,7 +26,7 @@ export const loginUser = async (userData, setUser) => {
       await AsyncStorage.setItem("refreshToken", refreshToken);
     }
 
-    setUser({ id: response.data.user.id, name: response.data.user.fullName });
+    setUser({ _id: response.data.user.id, name: response.data.user.fullName });
 
     return response.data;
   } catch (error) {
