@@ -25,15 +25,15 @@ const categories = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisibale, setIsVisibale] = useState(false);
   const [value, setValue] = useState(false);
-  // const [value2, setValue2] = useState(false);
-  const [range, setRange] = useState([0, 60]);
+  const [value2, setValue2] = useState(false);
+  const [range, setRange] = useState([0, 100]);
   const [sliderWidth, setSliderWidth] = useState(0);
 
   const { data, isLoading, error, isFetching, refetch } = useQuery({
     queryKey: ["shops", searchQuery],
     queryFn: ({ queryKey }) => {
       const [, searchQuery] = queryKey;
-      return fetchShops({ searchQuery, value, range });
+      return fetchShops({ searchQuery, value, value2 });
     },
     enabled: true,
   });
@@ -150,7 +150,7 @@ const categories = () => {
               <Text style={styles.txt}>Show sold shops</Text>
               <Switch value={value} onValueChange={setValue} />
             </View>
-            {/* <View
+            <View
               style={{
                 flexDirection: "row",
                 justifyContent: "center",
@@ -158,15 +158,16 @@ const categories = () => {
                 gap: 30,
               }}
             >
-              <Text style={styles.txt}>Pick Up today</Text>
+              <Text style={styles.txt}>Filter by rating</Text>
               <Switch value={value2} onValueChange={setValue2} />
-            </View> */}
+            </View>
             <View
               style={{
                 marginLeft: 10,
                 marginRight: 10,
                 alignItems: "stretch",
                 justifyContent: "center",
+                display: "none",
               }}
             >
               <View onLayout={handleLayout} style={styles.sliderWrapper}>
@@ -197,7 +198,7 @@ const categories = () => {
                   onValueChange={(values) => setRange(values)}
                   minimumValue={0}
                   maximumValue={100}
-                  step={15}
+                  step={20}
                   minimumTrackTintColor="black"
                   maximumTrackTintColor="lightgrey"
                   thumbTintColor="black"
@@ -222,6 +223,8 @@ const categories = () => {
               style={[styles.button, { borderColor: "grey" }]}
               onPress={() => {
                 setValue(false);
+                setValue2(false);
+                setRange([0, 100]);
                 setIsVisibale(false);
                 setTimeout(() => {
                   refetch();

@@ -89,7 +89,7 @@ export const fetchShops = async ({
 }) => {
   try {
     const response = await api.get(
-      `shops?name=${searchQuery.trim()}&showSold=${value}`
+      `shops?name=${searchQuery.trim()}&showSold=${value}&rating=${value2}`
     );
     return response.data;
   } catch (error) {
