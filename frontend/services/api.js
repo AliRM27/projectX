@@ -86,10 +86,12 @@ export const fetchShops = async ({
   searchQuery = "",
   value = "false",
   value2 = "",
+  query = "",
 }) => {
   try {
+    const queries = query && query.slice().join(",");
     const response = await api.get(
-      `shops?name=${searchQuery.trim()}&showSold=${value}&rating=${value2}`
+      `shops?name=${searchQuery.trim()}&showSold=${value}&rating=${value2}&queries=${queries}`
     );
     return response.data;
   } catch (error) {

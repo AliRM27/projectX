@@ -5,26 +5,21 @@ import {
   ScrollView,
   RefreshControl,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchHome, fetchCategories } from "../../services/api.js";
 import { useQuery } from "@tanstack/react-query";
 import Category from "../../components/Category.jsx";
 import Section from "../../components/Section.jsx";
 import { sampleData } from "../../utils/samlpeDatas.js";
+import { useCategories } from "../../context/categoriesContext.js";
 
 export default function index() {
   const [queries, setQuery] = useState(["all"]);
+  const { categories: categoriesContext, setCategories } = useCategories();
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["main", ...queries],
     queryFn: fetchHome,
-    // queryFn: () => {
-    //   return new Promise((resolve) => {
-    //     setTimeout(() => {
-    //       resolve(fetchHome({ queryKey: ["main", ...queries] }));
-    //     }, 4000);
-    //   });
-    // },
   });
 
   const {
@@ -34,14 +29,13 @@ export default function index() {
   } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
-    // queryFn: () => {
-    //   return new Promise((resolve) => {
-    //     setTimeout(() => {
-    //       resolve(fetchCategories());
-    //     }, 4000);
-    //   });
-    // },
   });
+
+  useEffect(() => {
+    if (categories && categories.length > 0) {
+      setCategories(categories);
+    }
+  }, [isLoadingCategories]);
 
   const updateQueries = (category) => {
     setQuery((prevQueries) => {

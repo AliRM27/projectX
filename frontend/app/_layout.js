@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
 import { FavoritesProvider } from "../context/favoriteContext";
 import { UserProvider } from "../context/userContext";
+import { CategoreisProvider } from "../context/categoriesContext";
 // import GlobalDataLoader from "../components/GlobalLoader";
 
 SplashScreen.preventAutoHideAsync();
@@ -33,22 +34,24 @@ export default function _layout() {
         <QueryClientProvider client={queryClient}>
           {/* <GlobalDataLoader /> */}
           <UserProvider>
-            <FavoritesProvider>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                  contentStyle: { backgroundColor: "white" },
-                }}
-              >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="(tabs)" />
-                <Stack.Screen name="(auth)/register" />
-                <Stack.Screen name="(auth)/login" />
-                <Stack.Screen name="welcome" />
-                <Stack.Screen name="product/[id]" />
-                <Stack.Screen name="shop/[id]" />
-              </Stack>
-            </FavoritesProvider>
+            <CategoreisProvider>
+              <FavoritesProvider>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: "white" },
+                  }}
+                >
+                  <Stack.Screen name="index" />
+                  <Stack.Screen name="(tabs)" />
+                  <Stack.Screen name="(auth)/register" />
+                  <Stack.Screen name="(auth)/login" />
+                  <Stack.Screen name="welcome" />
+                  <Stack.Screen name="product/[id]" />
+                  <Stack.Screen name="shop/[id]" />
+                </Stack>
+              </FavoritesProvider>
+            </CategoreisProvider>
           </UserProvider>
         </QueryClientProvider>
       </SafeAreaView>

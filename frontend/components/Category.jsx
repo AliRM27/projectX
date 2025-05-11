@@ -23,12 +23,23 @@ const Categorie = ({ name, extra, setQuery, queries, isLoading }) => {
         extra,
       ]}
       onPress={() => {
-        setQuery(name.toLowerCase());
+        if (extra.width === 130) {
+          isActive
+            ? setQuery((prev) => {
+                const newQueries = prev.filter(
+                  (query) => query !== name.toLowerCase()
+                );
+                return newQueries;
+              })
+            : setQuery((p) => [...p, name.toLowerCase()]);
+        } else {
+          setQuery(name.toLowerCase());
+        }
       }}
     >
       <Text
         style={[
-          { fontWeight: 500 },
+          { fontWeight: 600 },
           isActive ? styles.active.txt : styles.inActive.txt,
         ]}
       >

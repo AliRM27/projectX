@@ -12,6 +12,7 @@ import {
   Modal,
   Switch,
   RefreshControl,
+  ScrollView,
 } from "react-native";
 import { Slider } from "@miblanchard/react-native-slider";
 import { useQuery } from "@tanstack/react-query";
@@ -20,20 +21,24 @@ import Shop from "../../components/Shop";
 import Search from "../../assets/search.svg";
 import Filter from "../../assets/filter.svg";
 import Close from "../../assets/close.svg";
+import { useCategories } from "../../context/categoriesContext";
+import Categorie from "../../components/Category";
 
 const categories = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [query, setQuery] = useState([]);
   const [isVisibale, setIsVisibale] = useState(false);
   const [value, setValue] = useState(false);
   const [value2, setValue2] = useState(false);
   const [range, setRange] = useState([0, 100]);
   const [sliderWidth, setSliderWidth] = useState(0);
+  const { categories } = useCategories();
 
   const { data, isLoading, error, isFetching, refetch } = useQuery({
     queryKey: ["shops", searchQuery],
     queryFn: ({ queryKey }) => {
       const [, searchQuery] = queryKey;
-      return fetchShops({ searchQuery, value, value2 });
+      return fetchShops({ searchQuery, value, value2, query });
     },
     enabled: true,
   });
@@ -161,6 +166,27 @@ const categories = () => {
               <Text style={styles.txt}>Filter by rating</Text>
               <Switch value={value2} onValueChange={setValue2} />
             </View>
+            <ScrollView
+              contentContainerStyle={{
+                gap: 20,
+                flexDirection: "row",
+                flexWrap: "wrap",
+                justifyContent: "center",
+              }}
+            >
+              {categories.map(
+                (category, key) =>
+                  category.name !== "All" && (
+                    <Categorie
+                      extra={{ width: 130, marginRight: 0 }}
+                      key={key}
+                      name={category.name}
+                      queries={query}
+                      setQuery={setQuery}
+                    />
+                  )
+              )}
+            </ScrollView>
             <View
               style={{
                 marginLeft: 10,
@@ -214,7 +240,7 @@ const categories = () => {
               justifyContent: "center",
               alignItems: "center",
               position: "absolute",
-              bottom: 30,
+              bottom: 40,
               gap: 20,
               width: "100%",
             }}
@@ -225,6 +251,7 @@ const categories = () => {
                 setValue(false);
                 setValue2(false);
                 setRange([0, 100]);
+                setQuery([]);
                 setIsVisibale(false);
                 setTimeout(() => {
                   refetch();
@@ -301,7 +328,7 @@ const styles = StyleSheet.create({
     gap: 50,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
-    minHeight: "50%",
+    minHeight: "70%",
   },
   txt: {
     textAlign: "center",

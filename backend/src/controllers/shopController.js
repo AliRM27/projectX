@@ -2,7 +2,7 @@ import Shop from "../models/Shop.js";
 
 export const getAllShops = async (req, res) => {
   try {
-    const { name, showSold, rating } = req.query;
+    const { name, showSold, rating, queries } = req.query;
 
     let shops = [];
 
@@ -29,6 +29,12 @@ export const getAllShops = async (req, res) => {
       // Sort shops by their own rating (highest to lowest)
       shops = shops.sort((a, b) => b.rating - a.rating);
     }
+
+    if (queries) {
+      const queryArray = queries.split(",");
+      shops = shops.filter((shop) => queryArray.includes(shop.category));
+    }
+
     res.status(200).json(shops);
   } catch (error) {
     console.log(error);
