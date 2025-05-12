@@ -1,16 +1,16 @@
 import { Tabs } from "expo-router";
 import { StyleSheet } from "react-native";
 
-import HomeIcon from "../../assets/home.svg";
-import HomeActiveIcon from "../../assets/home-2.svg";
-import CategoriesIcon from "../../assets/category.svg";
-import CategoriesActiveIcon from "../../assets/categoryActive.svg";
-import CartIcon from "../../assets/shopping-bag.svg";
-import CartActiveIcon from "../../assets/shopping-bagActive.svg";
-import ProfileIcon from "../../assets/user.svg";
-import ProfileActiveIcon from "../../assets/userActive.svg";
-import Like from "../../assets/heart.svg";
-import LikeActive from "../../assets/heartActive.svg";
+import HomeIcon from "../../assets/svgs/home.svg";
+import HomeActiveIcon from "../../assets/svgs/home-2.svg";
+import CategoriesIcon from "../../assets/svgs/category.svg";
+import CategoriesActiveIcon from "../../assets/svgs/categoryActive.svg";
+import CartIcon from "../../assets/svgs/shopping-bag.svg";
+import CartActiveIcon from "../../assets/svgs/shopping-bagActive.svg";
+import ProfileIcon from "../../assets/svgs/user.svg";
+import ProfileActiveIcon from "../../assets/svgs/userActive.svg";
+import Like from "../../assets/svgs/heart.svg";
+import LikeActive from "../../assets/svgs/heartActive.svg";
 
 export default function TabsLayout() {
   return (

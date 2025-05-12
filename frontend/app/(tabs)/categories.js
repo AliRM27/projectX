@@ -18,9 +18,9 @@ import { Slider } from "@miblanchard/react-native-slider";
 import { useQuery } from "@tanstack/react-query";
 import { fetchShops } from "../../services/api";
 import Shop from "../../components/Shop";
-import Search from "../../assets/search.svg";
-import Filter from "../../assets/filter.svg";
-import Close from "../../assets/close.svg";
+import Search from "../../assets/svgs/search.svg";
+import Filter from "../../assets/svgs/filter.svg";
+import Close from "../../assets/svgs/close.svg";
 import { useCategories } from "../../context/categoriesContext";
 import Categorie from "../../components/Category";
 

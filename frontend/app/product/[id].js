@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchProduct, addToCart } from "../../services/api.js";
 import { useQueryClient } from "@tanstack/react-query";
-import ArrowBack from "../../assets/arrowleft.svg";
+import ArrowBack from "../../assets/svgs/arrowleft.svg";
 
 const product = () => {
   const { id } = useLocalSearchParams();

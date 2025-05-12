@@ -10,7 +10,7 @@ import React, { useState } from "react";
 import { router } from "expo-router";
 import { FontAwesome } from "@expo/vector-icons";
 import SkeletonBox from "./Skeleton";
-import Like from "../assets/like.svg";
+import Like from "../assets/svgs/like.svg";
 import { useFavorites } from "../context/favoriteContext";
 
 const Shop = ({ item, loading }) => {

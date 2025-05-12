@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import React from "react";
 import { router, useLocalSearchParams } from "expo-router";
-import ArrowLeft from "../../assets/arrowleft.svg";
+import ArrowLeft from "../../assets/svgs/arrowleft.svg";
 import { useQuery } from "@tanstack/react-query";
 import { fetchShop } from "../../services/api";
 import ProductCard from "../../components/ProductCard";
