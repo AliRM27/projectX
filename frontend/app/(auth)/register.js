@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { registerUser } from "../../services/authApi.js"; // Import API function
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 
 const RegisterScreen = () => {
   const [form, setForm] = useState({ fullName: "", email: "", password: "" });

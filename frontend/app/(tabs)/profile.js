@@ -44,7 +44,7 @@ export default function profile() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
+        <ActivityIndicator size="large" />
       </View>
     );
   }
@@ -58,16 +58,38 @@ export default function profile() {
       >
         <View style={{ marginTop: 20, width: "100%" }}>
           <Text style={styles.h2}>General</Text>
-          <Setting name={"Account Details"} Icon={User} />
-          <Setting name={"Payment Method"} Icon={Card} />
-          <Setting name={"Location"} Icon={Location} />
+          <Setting name={"Account Details"} Icon={User} link={"details"} />
+          <Setting name={"Payment Method"} Icon={Card} link={"payment"} />
+          <Setting name={"Location"} Icon={Location} link={"location"} />
         </View>
         <View style={{ marginTop: 20, width: "100%" }}>
           <Text style={styles.h2}>Setting</Text>
-          <Setting name={"Notifications"} Icon={Notification} />
-          <Setting name={"Language"} Icon={Global} />
-          <Setting name={"Privacy & Policy"} Icon={Info} />
-          <Setting name={"Contact Us"} Icon={Call} />
+          <Setting
+            name={"Notifications"}
+            Icon={Notification}
+            link={"notification"}
+          />
+          <Setting name={"Language"} Icon={Global} link={"language"} />
+          <Setting
+            name={"Privacy & Policy"}
+            Icon={Info}
+            link={"privacyPolicy"}
+          />
+          <Setting name={"Contact Us"} Icon={Call} link={"contactUs"} />
+        </View>
+        <View style={{ marginTop: 10, width: "100%" }}>
+          <Button
+            title="Logout"
+            onPress={logOut}
+            color="#FF0000"
+            accessibilityLabel="Logout"
+            style={{
+              width: "100%",
+              padding: 10,
+              backgroundColor: "#FF0000",
+              borderRadius: 5,
+            }}
+          />
         </View>
       </ScrollView>
     </View>

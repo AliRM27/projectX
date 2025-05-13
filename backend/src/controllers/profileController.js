@@ -11,7 +11,7 @@ export const getUser = async (req, res) => {
         message: "User not found",
       });
     }
-    const { passwordHash, ...UserData } = user._doc;
+    const { password, ...UserData } = user._doc;
 
     res.status(200).json(UserData);
   } catch (err) {

@@ -21,8 +21,11 @@ export const register = async (req, res) => {
     // Create user
     const newUser = new User({
       fullName,
-      email,
       password: hashedPassword,
+      email,
+      phone: "",
+      location: {},
+      orders: [],
     });
 
     // Create a cart for the user
@@ -71,9 +74,11 @@ export const login = async (req, res) => {
       expiresIn: "30d",
     }); // 30 days expiry for refresh token
 
+    const { password: hashedPassword, ...UserData } = user._doc;
+
     res.status(200).json({
       message: "Login successful",
-      user: { id: user._id, fullName: user.fullName, email: user.email },
+      user: UserData,
       accessToken,
       refreshToken,
     });
