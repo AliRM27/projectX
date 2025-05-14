@@ -5,11 +5,13 @@ import {
   updateUser,
   deleteProfile,
 } from "../controllers/profileController.js";
+import handleValidationErrors from "../utils/handleValidationErrors.js";
+import { editValidations } from "../validations/validations.js";
 
 const router = express.Router();
 
 router.get("/", checkAuth, getUser);
-router.put("/", checkAuth, updateUser);
+router.put("/", editValidations, handleValidationErrors, checkAuth, updateUser);
 router.delete("/", checkAuth, deleteProfile);
 
 export default router;

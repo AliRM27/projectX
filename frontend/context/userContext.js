@@ -6,6 +6,7 @@ const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [changed, setChanged] = useState(true);
 
   // Check AsyncStorage on mount
   useEffect(() => {
@@ -26,10 +27,10 @@ export const UserProvider = ({ children }) => {
     };
 
     restoreUser();
-  }, []);
+  }, [changed]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, setChanged }}>
       {children}
     </UserContext.Provider>
   );

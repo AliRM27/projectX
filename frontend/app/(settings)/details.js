@@ -11,13 +11,39 @@ import { useUser } from "../../context/userContext";
 import React, { useState } from "react";
 import ArrowLeft from "../../assets/svgs/arrowleft.svg";
 import { router } from "expo-router";
+import { updateUser } from "../../services/authApi";
 
 const details = () => {
-  const { user } = useUser();
+  const { user, setChanged } = useUser();
   const [fullName, setFullName] = useState(user.fullName);
   const [email, setEmail] = useState(user.email);
-  const [phone, setPhone] = useState(user.phone);
-  const [password, setPassword] = useState(user.password);
+  const [phone, setPhone] = useState(user.phone || "");
+
+  const editUser = async () => {
+    try {
+      const res = await updateUser({
+        fullName: fullName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+      });
+      setChanged((p) => !p);
+      res === 200 &&
+        Alert.alert("Success", "Your data was changed", [
+          {
+            text: "Ok",
+            onPress: () => router.back(),
+          },
+        ]);
+      !res &&
+        Alert.alert("Error", "Your data was not changed", [
+          {
+            text: "Ok",
+          },
+        ]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -68,6 +94,7 @@ const details = () => {
           height: 50,
           justifyContent: "center",
         }}
+        onPress={() => editUser()}
       >
         <Text
           style={{

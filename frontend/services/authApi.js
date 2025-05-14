@@ -45,3 +45,12 @@ export const logoutUser = async (setUser) => {
     console.error(error);
   }
 };
+
+export const updateUser = async (updatedData) => {
+  try {
+    const response = api.put("user", updatedData);
+    return (await response).status;
+  } catch (error) {
+    console.error(error);
+  }
+};

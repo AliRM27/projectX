@@ -44,3 +44,19 @@ export const loginValidations = [
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long"),
 ];
+
+export const editValidations = [
+  body("fullName")
+    .notEmpty()
+    .withMessage("Full name is required")
+    .isLength({ min: 3 })
+    .withMessage("Full name must be at least 3 characters long")
+    .matches(/^[a-zA-Z\s]+$/)
+    .withMessage("Full name can only contain letters and spaces"),
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format")
+    .normalizeEmail(),
+];
