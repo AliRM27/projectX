@@ -75,7 +75,7 @@ const favorites = () => {
       >
         Your Favorites:
       </Text>
-      <ScrollView style={{ marginTop: 30 }}>
+      <ScrollView style={{ marginTop: 30 }} contentContainerStyle={{alignItems:"center", paddingBottom:30}} showsVerticalScrollIndicator={false} >
         {favoriteShops.map((shop, key) => (
           <Shop key={key} item={shop} />
         ))}

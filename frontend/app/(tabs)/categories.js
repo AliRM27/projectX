@@ -13,6 +13,7 @@ import {
   Switch,
   RefreshControl,
   ScrollView,
+  Dimensions,
 } from "react-native";
 import { Slider } from "@miblanchard/react-native-slider";
 import { useQuery } from "@tanstack/react-query";
@@ -67,7 +68,14 @@ const categories = () => {
   return (
     <View style={styles.container}>
       {/* Search Bar */}
-      <View style={{ position: "absolute", top: 26, left: 35, zIndex: 1 }}>
+      <View
+        style={{
+          position: "absolute",
+          top: 26,
+          left: Dimensions.get("window").width * 0.09,
+          zIndex: 1,
+        }}
+      >
         <Search height={30} width={30} />
       </View>
       <View
@@ -167,7 +175,14 @@ const categories = () => {
               <Switch value={value2} onValueChange={setValue2} />
             </View>
             <ScrollView
+              style={{
+                borderWidth: 1,
+                maxHeight: 130,
+                borderRadius: 20,
+                borderColor: "lightgrey",
+              }}
               contentContainerStyle={{
+                padding: 10,
                 gap: 20,
                 flexDirection: "row",
                 flexWrap: "wrap",
@@ -178,7 +193,10 @@ const categories = () => {
                 (category, key) =>
                   category.name !== "All" && (
                     <Categorie
-                      extra={{ width: 130, marginRight: 0 }}
+                      extra={{
+                        width: Dimensions.get("window").width * 0.33,
+                        marginRight: 0,
+                      }}
                       key={key}
                       name={category.name}
                       queries={query}
@@ -279,7 +297,8 @@ const categories = () => {
     </View>
   );
 };
-
+// console.log(Dimensions.get("window").height , 'H');
+// console.log(Dimensions.get("window").width , 'W');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -293,10 +312,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 46,
     fontSize: 16,
-    width: 270,
+    width: Dimensions.get("window").width * 0.69,
   },
   list: {
-    paddingBottom: 16,
+    paddingBottom: 35,
     alignItems: "center",
   },
   noShopsText: {
@@ -325,7 +344,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 2,
     padding: 30,
-    gap: 50,
+    gap: Dimensions.get("window").height * 0.06,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     minHeight: "70%",
@@ -339,8 +358,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     borderWidth: 1,
-    width: 150,
-    height: 60,
+    width: Dimensions.get("window").width * 0.38,
+    height: Dimensions.get("window").height * 0.071,
     justifyContent: "center",
   },
   track: {

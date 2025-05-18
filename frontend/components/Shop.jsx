@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
   Animated,
+  Dimensions
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
@@ -120,9 +121,9 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 10,
     overflow: "hidden",
-    width: 300,
+    width: Dimensions.get("window").width * 0.9,
     height: 250,
-    margin: 10,
+    marginVertical: 10,
     elevation: 3, // Shadow for Android
     shadowColor: "#000", // Shadow for iOS
     shadowOffset: { width: 0, height: 2 }, // Shadow offset for iOS

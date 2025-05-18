@@ -1,5 +1,4 @@
-import { Text, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import { Text, StyleSheet, Pressable, Dimensions } from "react-native";
 import SkeletonBox from "./Skeleton";
 
 const Categorie = ({ name, extra, setQuery, queries, isLoading }) => {
@@ -23,7 +22,7 @@ const Categorie = ({ name, extra, setQuery, queries, isLoading }) => {
         extra,
       ]}
       onPress={() => {
-        if (extra.width === 130) {
+        if (extra.width === Dimensions.get("window").width * 0.33) {
           isActive
             ? setQuery((prev) => {
                 const newQueries = prev.filter(

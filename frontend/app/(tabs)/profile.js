@@ -53,10 +53,11 @@ export default function profile() {
     <View style={[styles.container, { justifyContent: "flex-start" }]}>
       <Text style={styles.heading}>My Account</Text>
       <ScrollView
-        style={{ width: "90%" }}
-        contentContainerStyle={{ alignItems: "center" }}
+        style={{ width: "90%", marginTop: 40 }}
+        contentContainerStyle={{ alignItems: "center", paddingBottom: 90 }}
+        showsVerticalScrollIndicator={false}
       >
-        <View style={{ marginTop: 20, width: "100%" }}>
+        <View style={{ width: "100%" }}>
           <Text style={styles.h2}>General</Text>
           <Setting name={"Account Details"} Icon={User} link={"details"} />
           <Setting name={"Payment Method"} Icon={Card} link={"payment"} />

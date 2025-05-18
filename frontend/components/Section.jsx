@@ -20,6 +20,7 @@ const Section = ({ shops, isLoading, isFirst = false, name, queries }) => {
         style={{ marginLeft: 15 }}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ gap: 15 }}
       >
         {isLoading
           ? Array.from({ length: 3 }, (_, index) => (
