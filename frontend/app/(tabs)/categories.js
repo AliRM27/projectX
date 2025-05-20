@@ -72,7 +72,7 @@ const categories = () => {
         style={{
           position: "absolute",
           top: 26,
-          left: Dimensions.get("window").width * 0.09,
+          left: Dimensions.get("screen").width * 0.09,
           zIndex: 1,
         }}
       >
@@ -194,7 +194,7 @@ const categories = () => {
                   category.name !== "All" && (
                     <Categorie
                       extra={{
-                        width: Dimensions.get("window").width * 0.33,
+                        width: Dimensions.get("screen").width * 0.33,
                         marginRight: 0,
                       }}
                       key={key}
@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 46,
     fontSize: 16,
-    width: Dimensions.get("window").width * 0.69,
+    width: Dimensions.get("screen").width * 0.69,
   },
   list: {
     paddingBottom: 35,
@@ -344,7 +344,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 2,
     padding: 30,
-    gap: Dimensions.get("window").height * 0.06,
+    gap: Dimensions.get("screen").height * 0.06,
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     minHeight: "70%",
@@ -358,8 +358,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
     borderWidth: 1,
-    width: Dimensions.get("window").width * 0.38,
-    height: Dimensions.get("window").height * 0.071,
+    width: Dimensions.get("screen").width * 0.38,
+    height: Dimensions.get("screen").height * 0.071,
     justifyContent: "center",
   },
   track: {

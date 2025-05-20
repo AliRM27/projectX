@@ -22,7 +22,7 @@ const Categorie = ({ name, extra, setQuery, queries, isLoading }) => {
         extra,
       ]}
       onPress={() => {
-        if (extra.width === Dimensions.get("window").width * 0.33) {
+        if (extra.width === Dimensions.get("screen").width * 0.33) {
           isActive
             ? setQuery((prev) => {
                 const newQueries = prev.filter(

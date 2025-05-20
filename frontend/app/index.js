@@ -15,7 +15,7 @@ const index = () => {
         console.log("Token found, navigating to tabs");
         router.replace("/(tabs)");
         SplashScreen.hideAsync();
-      }else if (!hasLaunched) {
+      } else if (!hasLaunched) {
         console.log("First Time here");
         router.replace("/welcome");
         SplashScreen.hideAsync();

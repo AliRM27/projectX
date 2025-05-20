@@ -26,6 +26,7 @@ export const loginUser = async (userData, setUser) => {
       await AsyncStorage.setItem("refreshToken", refreshToken);
     }
 
+    await AsyncStorage.setItem("hasLaunched", "true"); //should be removed
     setUser(response.data.user);
 
     return response.data;

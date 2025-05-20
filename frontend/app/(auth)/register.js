@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { registerUser } from "../../services/authApi.js"; // Import API function
 import { router } from "expo-router";
+import Google from "../../assets/svgs/google.svg";
+import Apple from "../../assets/svgs/apple.svg";
 
 const RegisterScreen = () => {
   const [form, setForm] = useState({ fullName: "", email: "", password: "" });
@@ -41,44 +43,106 @@ const RegisterScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Register</Text>
+      <Text style={styles.title}>Create Your Account</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Name"
-        value={form.fullName}
-        onChangeText={(text) => handleChange("fullName", text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        value={form.email}
-        onChangeText={(text) => handleChange("email", text)}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={form.password}
-        onChangeText={(text) => handleChange("password", text)}
-      />
-
-      {isError && <Text style={{ color: "red" }}>{error}</Text>}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleRegister}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text style={styles.buttonText}>Register</Text>
+      <View style={{ gap: 20 }}>
+        <TextInput
+          style={styles.input}
+          placeholder="Name"
+          value={form.fullName}
+          onChangeText={(text) => handleChange("fullName", text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          value={form.email}
+          onChangeText={(text) => handleChange("email", text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={form.password}
+          onChangeText={(text) => handleChange("password", text)}
+        />
+        {isError && (
+          <Text style={{ color: "red", textAlign: "center", marginTop: 10 }}>
+            {error}
+          </Text>
         )}
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.replace("/login")}>
-        <Text style={{ textAlign: "center", marginTop: 20 }}>
-          Already have an account? Login
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleRegister}
+          disabled={loading}
+          activeOpacity={0.7}
+        >
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.buttonText}>Sign Up</Text>
+          )}
+        </TouchableOpacity>
+      </View>
+
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: 5,
+          marginVertical: 30,
+        }}
+      >
+        <View style={{ width: "35%", height: 1, backgroundColor: "#ccc" }} />
+        <Text style={{ color: "grey" }}>Or sign in with</Text>
+        <View style={{ width: "35%", height: 1, backgroundColor: "#ccc" }} />
+      </View>
+      <View style={{ gap: 25 }}>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 10,
+            borderRadius: 20,
+            alignItems: "center",
+            height: 55,
+          }}
+          activeOpacity={0.6}
+        >
+          <Google style={{ marginHorizontal: 40 }} width={25} height={25} />
+          <Text style={{ color: "grey", fontWeight: "600", fontSize: 16 }}>
+            Continue with Google
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 10,
+            borderRadius: 20,
+            alignItems: "center",
+            height: 55,
+          }}
+          activeOpacity={0.6}
+        >
+          <Apple style={{ marginHorizontal: 40 }} width={25} height={25} />
+          <Text style={{ color: "grey", fontWeight: "600", fontSize: 16 }}>
+            Continue with Apple
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <TouchableOpacity
+        onPress={() => router.replace("login")}
+        activeOpacity={0.5}
+        style={{ marginTop: 40 }}
+      >
+        <Text style={{ textAlign: "center", color: "grey", fontSize: 16 }}>
+          Already have an account?{" "}
+          <Text style={{ fontWeight: "bold", color: "black" }}>Sing In.</Text>
         </Text>
       </TouchableOpacity>
     </View>
@@ -88,29 +152,36 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     padding: 20,
-    backgroundColor: "#f5f5f5",
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
+    marginVertical: 30,
   },
   input: {
-    backgroundColor: "white",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 8,
+    padding: 15,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    height: 55,
+    width: "100%",
+    fontSize: 16,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "black",
     padding: 15,
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 15,
+    height: 60,
+    justifyContent: "center",
   },
-  buttonText: { color: "white", fontSize: 16, fontWeight: "bold" },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });
 
 export default RegisterScreen;

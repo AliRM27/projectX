@@ -6,10 +6,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import { loginUser } from "../../services/authApi.js"; // Import login function
 import { router } from "expo-router";
 import { useUser } from "../../context/userContext.js";
+import Google from "../../assets/svgs/google.svg";
+import Apple from "../../assets/svgs/apple.svg";
 
 const LoginScreen = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -37,40 +40,110 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <View style={{ marginVertical: 30, alignItems: "flex-start", gap: 15 }}>
+        <Text style={styles.title}>Welcome Back!</Text>
+        <Text style={styles.title}>Sing In</Text>
+      </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        keyboardType="email-address"
-        value={form.email}
-        onChangeText={(text) => handleChange("email", text)}
-      />
+      <View style={{ gap: 20 }}>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          keyboardType="email-address"
+          value={form.email}
+          onChangeText={(text) => handleChange("email", text)}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={form.password}
-        onChangeText={(text) => handleChange("password", text)}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          secureTextEntry
+          value={form.password}
+          onChangeText={(text) => handleChange("password", text)}
+        />
+        <Pressable>
+          <Text
+            style={{ fontSize: 16, fontWeight: 500, alignSelf: "flex-end" }}
+          >
+            Forget Password?
+          </Text>
+        </Pressable>
+        {isError && (
+          <Text style={{ color: "red", textAlign: "center" }}>{error}</Text>
+        )}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleLogin}
+          disabled={loading}
+          activeOpacity={0.7}
+        >
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.buttonText}>Sign In</Text>
+          )}
+        </TouchableOpacity>
+      </View>
 
-      {isError && <Text style={{ color: "red" }}>{error}</Text>}
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: 5,
+          marginVertical: 30,
+        }}
+      >
+        <View style={{ width: "35%", height: 1, backgroundColor: "#ccc" }} />
+        <Text style={{ color: "grey" }}>Or sign in with</Text>
+        <View style={{ width: "35%", height: 1, backgroundColor: "#ccc" }} />
+      </View>
+
+      <View style={{ gap: 25 }}>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 10,
+            borderRadius: 20,
+            alignItems: "center",
+            height: 55,
+          }}
+          activeOpacity={0.6}
+        >
+          <Google style={{ marginHorizontal: 40 }} width={25} height={25} />
+          <Text style={{ color: "grey", fontWeight: "600", fontSize: 16 }}>
+            Continue with Google
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flexDirection: "row",
+            borderWidth: 1,
+            borderColor: "#ccc",
+            padding: 10,
+            borderRadius: 20,
+            alignItems: "center",
+            height: 55,
+          }}
+          activeOpacity={0.6}
+        >
+          <Apple style={{ marginHorizontal: 40 }} width={25} height={25} />
+          <Text style={{ color: "grey", fontWeight: "600", fontSize: 16 }}>
+            Continue with Apple
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
-        style={styles.button}
-        onPress={handleLogin}
-        disabled={loading}
+        onPress={() => router.replace("register")}
+        activeOpacity={0.5}
+        style={{ marginTop: 40 }}
       >
-        {loading ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text style={styles.buttonText}>Login</Text>
-        )}
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.replace("register")}>
-        <Text style={{ textAlign: "center", marginTop: 20 }}>
-          Dont have an account? Register
+        <Text style={{ textAlign: "center", color: "grey", fontSize: 16 }}>
+          Already have an account?{" "}
+          <Text style={{ fontWeight: "bold", color: "black" }}>Sing Up.</Text>
         </Text>
       </TouchableOpacity>
     </View>
@@ -80,27 +153,29 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     padding: 20,
-    backgroundColor: "#f5f5f5",
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 20,
   },
   input: {
-    backgroundColor: "white",
-    padding: 10,
-    marginBottom: 10,
-    borderRadius: 8,
+    padding: 15,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    height: 55,
+    width: "100%",
+    fontSize: 16,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "black",
     padding: 15,
     alignItems: "center",
-    borderRadius: 8,
+    borderRadius: 15,
+    height: 60,
+    justifyContent: "center",
   },
   buttonText: { color: "white", fontSize: 16, fontWeight: "bold" },
   linkText: { textAlign: "center", color: "#007bff", marginTop: 15 },
