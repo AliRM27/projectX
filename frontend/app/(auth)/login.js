@@ -61,7 +61,7 @@ const LoginScreen = () => {
           value={form.password}
           onChangeText={(text) => handleChange("password", text)}
         />
-        <Pressable>
+        <Pressable onPress={() => router.push("(resetPassword)")}>
           <Text
             style={{ fontSize: 16, fontWeight: 500, alignSelf: "flex-end" }}
           >

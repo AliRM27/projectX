@@ -81,9 +81,18 @@ const details = () => {
           placeholder="Phone Number"
           keyboardType="numbers-and-punctuation"
         />
-        <View style={{ position: "absolute", right: 20, bottom: 25 }}>
+        <View style={{ position: "absolute", right: 20, bottom: 53 }}>
           <Text style={{ color: "rgb(125, 125, 125)" }}>(Optional)</Text>
         </View>
+        <TouchableOpacity
+          onPress={() => {
+            setPhone("");
+          }}
+          activeOpacity={0.6}
+          style={{ alignSelf: "flex-end" }}
+        >
+          <Text style={{ fontSize: 16, color: "red" }}>Remove Number</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={{

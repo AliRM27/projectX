@@ -59,4 +59,10 @@ export const editValidations = [
     .isEmail()
     .withMessage("Invalid email format")
     .normalizeEmail(),
+  body("phone")
+    .optional({ checkFalsy: true })
+    .isMobilePhone()
+    .withMessage("Invalid phone number format")
+    .isLength({ min: 10, max: 15 })
+    .withMessage("Phone number must be between 10 and 15 digits"),
 ];
