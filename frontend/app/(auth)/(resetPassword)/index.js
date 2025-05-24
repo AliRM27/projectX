@@ -5,19 +5,36 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
+  ActivityIndicator
 } from "react-native";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import Back from "../../../assets/svgs/arrowleft.svg";
+import { requestReset } from "../../../services/authApi";
 
 const getEmail = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleRequestReset = async () => {
+    try {
+      setLoading(true);
+      const res = await requestReset(email);
+      if (!res.success) {
+        throw new Error(res.message || "Failed to request password reset");
+      }
+      router.push({pathname: "/verifyEmail", params: { email }})
+    } catch (error) {
+      console.error("Error requesting password reset:", error);
+    }
+    setLoading(false);
+  };
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Pressable
         onPress={() => router.back()}
-        style={{ position: "absolute", top: 20, left: 20 }}
+        style={{ position: "absolute", top: 20, left: 20, zIndex: 1 }}
       >
         <Back />
       </Pressable>
@@ -28,13 +45,19 @@ const getEmail = () => {
         keyboardType="email-address"
         value={email}
         onChangeText={setEmail}
+        autoCapitalize="none"
       />
       <TouchableOpacity
-        onPress={() => router.push("verifyEmail")}
+        onPress={() => handleRequestReset()}
         style={styles.button}
         activeOpacity={0.7}
+        disabled={loading}
       >
-        <Text style={styles.buttonText}>Next</Text>
+        {loading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={styles.buttonText}>Next</Text>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -44,7 +67,6 @@ export default getEmail;
 
 const styles = StyleSheet.create({
   heading: {
-    marginTop: 20,
     marginBottom: 40,
     fontSize: 24,
     fontWeight: "bold",

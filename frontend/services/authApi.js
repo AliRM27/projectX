@@ -55,3 +55,33 @@ export const updateUser = async (updatedData) => {
     console.error(error);
   }
 };
+
+export const requestReset = async (email) => {
+  try {
+    const response = await api.post("auth/request-reset", { email });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data?.message || "Request reset failed";
+  }
+}
+
+export const verifyOTP = async ({email, otp}) => {
+  try {
+    console.log("Verifying OTP for email:", email, "with OTP:", otp);
+    const response = await api.post("auth/verify-otp", { email, otp });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data?.message || "Verify OTP failed";
+  }
+};
+export const resetUserPassword = async ({email, newPassword}) => {
+  try {
+    const response = await api.post("auth/reset-password", { email, newPassword });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data?.message || "Reset password failed";
+  }
+};
