@@ -7,8 +7,10 @@ import {
   ActivityIndicator,
   StyleSheet,
   Pressable,
+  Alert,
 } from "react-native";
-import { loginUser } from "../../services/authApi.js"; // Import login function
+import { loginUser } from "../../services/authApi.js";
+import { useGoogleAuth } from "../../services/googleAuth.js";
 import { router } from "expo-router";
 import { useUser } from "../../context/userContext.js";
 import Google from "../../assets/svgs/google.svg";
@@ -20,6 +22,7 @@ const LoginScreen = () => {
   const [error, setError] = useState(null);
   const [isError, setIsError] = useState(false);
   const { setUser } = useUser();
+  const { handleGoogleSignIn, isGoogleSignInReady } = useGoogleAuth();
 
   const handleChange = (key, value) => {
     setForm({ ...form, [key]: value });
@@ -32,7 +35,35 @@ const LoginScreen = () => {
       setError(response.message);
       router.replace("../(tabs)");
     } catch (error) {
-      setError(error);
+      if (error.isEmailVerified === false) {
+        Alert.alert("Email Not Verified", error.message, [
+          {
+            text: "OK",
+            onPress: () => {
+              // You can add additional actions here if needed
+            },
+          },
+        ]);
+      } else {
+        setError(error.message || "Login failed");
+        setIsError(true);
+      }
+    }
+    setLoading(false);
+  };
+
+  const handleGoogleLogin = async () => {
+    setLoading(true);
+    try {
+      const result = await handleGoogleSignIn(setUser);
+      if (result.success) {
+        router.replace("../(tabs)");
+      } else {
+        setError(result.error);
+        setIsError(true);
+      }
+    } catch (error) {
+      setError(error.message);
       setIsError(true);
     }
     setLoading(false);
@@ -99,7 +130,7 @@ const LoginScreen = () => {
         <View style={{ width: "35%", height: 1, backgroundColor: "#ccc" }} />
       </View>
 
-      <View style={{ gap: 25 }}>
+      <View style={{ gap: 15 }}>
         <TouchableOpacity
           style={{
             flexDirection: "row",
@@ -111,6 +142,8 @@ const LoginScreen = () => {
             height: 55,
           }}
           activeOpacity={0.6}
+          onPress={handleGoogleLogin}
+          disabled={!isGoogleSignInReady || loading}
         >
           <Google style={{ marginHorizontal: 40 }} width={25} height={25} />
           <Text style={{ color: "grey", fontWeight: "600", fontSize: 16 }}>

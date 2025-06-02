@@ -343,6 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderColor: "black",
     borderWidth: 2,
+    borderBottomWidth: 0,
     padding: 30,
     gap: Dimensions.get("screen").height * 0.06,
     borderTopLeftRadius: 40,

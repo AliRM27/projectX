@@ -6,17 +6,17 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import Back from "../../../assets/svgs/arrowleft.svg";
 import { router } from "expo-router";
 import OtpInput from "../../../components/OtpInput";
 import { verifyOTP } from "../../../services/authApi";
 import { useSearchParams } from "expo-router/build/hooks";
 import { useLocalSearchParams } from "expo-router/build/hooks";
+import BackArrow from "../../../components/BackArrow";
 
 const verifyEmail = () => {
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false); // Uncomment if you want to handle loading state
-  const {email} = useLocalSearchParams();
+  const { email } = useLocalSearchParams();
 
   const handleOtpChange = async () => {
     try {
@@ -32,9 +32,7 @@ const verifyEmail = () => {
 
   return (
     <View style={{ flex: 1, padding: 20, gap: 40 }}>
-      <Pressable onPress={() => router.back()} style={{}}>
-        <Back />
-      </Pressable>
+      <BackArrow />
       <View style={{ gap: 20 }}>
         <Text style={styles.heading}>VerifyEmail</Text>
         <Text style={{ color: "grey" }}>Code has been sent to your email.</Text>

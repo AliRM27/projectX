@@ -11,7 +11,7 @@ import React, { useEffect, useState } from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import { fetchProduct, addToCart } from "../../services/api.js";
 import { useQueryClient } from "@tanstack/react-query";
-import ArrowBack from "../../assets/svgs/arrowleft.svg";
+import BackArrow from "../../components/BackArrow.jsx";
 
 const product = () => {
   const { id } = useLocalSearchParams();
@@ -56,14 +56,7 @@ const product = () => {
         backgroundColor: "white",
       }}
     >
-      <Pressable
-        onPress={() => {
-          router.back();
-        }}
-        style={{ position: "absolute", top: 0, left: 0, padding: 10 }}
-      >
-        <ArrowBack width={30} height={30} />
-      </Pressable>
+      <BackArrow />
       {loading ? (
         <ActivityIndicator size="large" color="black" />
       ) : (

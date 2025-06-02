@@ -13,11 +13,19 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: function () {
+        return !this.googleId; // Password is required only if not using Google auth
+      },
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allows null/undefined values
     },
     phone: {
       type: String,
       unique: true,
+      sparse: true,
     },
     location: {
       city: {
@@ -43,6 +51,17 @@ const userSchema = new mongoose.Schema(
     ],
     resetOTP: { type: String },
     otpExpiry: { type: Date },
+    // Email verification fields
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+    },
+    verificationTokenExpiry: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

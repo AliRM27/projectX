@@ -9,10 +9,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import SkeletonBox from "./Skeleton";
+import { router } from "expo-router";
 
 const ProductCard = ({
   bag,
   loading = false, // 👈 Add a loading prop
+  width,
+  height,
 }) => {
   if (loading) {
     return (
@@ -29,7 +32,14 @@ const ProductCard = ({
   }
 
   return (
-    <TouchableOpacity style={styles.card} activeOpacity={0.85}>
+    <TouchableOpacity
+      style={[styles.card, { width, height }]}
+      activeOpacity={0.85}
+      disabled={bag.quantity === 0 ? true : false}
+      onPress={() => {
+        router.push("product/" + bag._id);
+      }}
+    >
       <View
         style={{
           position: "absolute",
@@ -37,34 +47,47 @@ const ProductCard = ({
           right: 10,
           zIndex: 1,
           backgroundColor: "white",
-          borderRadius: 8,
+          borderRadius: width === 200 ? 50 : 8,
           padding: 4,
+          width: width === 200 ? 30 : null,
+          height: width === 200 ? 30 : null,
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Text>{bag.quantity}+ bags left</Text>
+        <Text>
+          {bag.quantity}
+          {width === 200 ? "" : "+ bags left"}
+        </Text>
       </View>
-      <Image
-        source={require("../assets/examples/nikeShoe.png")}
-        style={styles.image}
-      />
+      <View style={{ width: "100%", height: "50%" }}>
+        <Image
+          source={require("../assets/examples/nikeShoe.png")}
+          style={styles.image}
+        />
+      </View>
       <View style={styles.content}>
-        <Text style={styles.title} numberOfLines={2}>
+        <Text
+          style={[styles.title, { fontSize: width === 200 ? 14 : 17 }]}
+          numberOfLines={2}
+        >
           {bag.title}
         </Text>
-        <Text style={styles.category}>{bag.category}</Text>
-        <Text style={styles.pickup}>🕒 {bag.pickUpTime}</Text>
+        <Text style={styles.pickup}>Today {bag.pickUpTime}</Text>
 
-        <View style={styles.bottomRow}>
-          <View style={styles.priceContainer}>
-            <Text style={styles.price}>${bag.newPrice.toFixed(2)}</Text>
-            {bag.oldPrice && (
-              <Text style={styles.originalPrice}>
-                ${bag.oldPrice.toFixed(2)}
-              </Text>
-            )}
-          </View>
-          {bag.rating !== undefined && (
-            <Text style={styles.rating}>⭐ {rating.toFixed(1)}</Text>
+        <View style={styles.priceContainer}>
+          <Text style={[styles.price, { fontSize: width === 200 ? 14 : 16 }]}>
+            ${bag.newPrice.toFixed(2)}
+          </Text>
+          {bag.oldPrice && (
+            <Text
+              style={[
+                styles.originalPrice,
+                { fontSize: width === 200 ? 12 : 14 },
+              ]}
+            >
+              ${bag.oldPrice.toFixed(2)}
+            </Text>
           )}
         </View>
       </View>
@@ -79,21 +102,14 @@ const styles = StyleSheet.create({
     borderColor: "#e5e7eb",
     borderWidth: 1,
     overflow: "hidden",
-    marginVertical: 10,
-    marginHorizontal: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 3,
-    width: 300,
   },
   image: {
     width: "100%",
-    height: 180,
+    height: "100%",
   },
   content: {
     padding: 14,
+    gap: 5,
   },
   title: {
     fontSize: 17,
@@ -108,7 +124,6 @@ const styles = StyleSheet.create({
   pickup: {
     fontSize: 13,
     color: "#374151",
-    marginTop: 6,
   },
   bottomRow: {
     marginTop: 10,
@@ -121,13 +136,11 @@ const styles = StyleSheet.create({
     alignItems: "baseline",
   },
   price: {
-    fontSize: 16,
     fontWeight: "bold",
     color: "#10b981",
     marginRight: 6,
   },
   originalPrice: {
-    fontSize: 14,
     color: "#9ca3af",
     textDecorationLine: "line-through",
   },

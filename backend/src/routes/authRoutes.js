@@ -6,6 +6,8 @@ import {
   requestReset,
   verifyOTP,
   resetPassword,
+  googleAuth,
+  verifyEmail,
 } from "../controllers/authController.js";
 import handleValidationErrors from "../utils/handleValidationErrors.js";
 import checkAuth from "../middleware/checkRefreshToken.js";
@@ -21,6 +23,7 @@ const router = express.Router();
 router.post("/register", registerValidations, handleValidationErrors, register);
 router.post("/login", loginValidations, handleValidationErrors, login);
 router.post("/refresh-token", checkAuth, refreshToken);
+router.post("/verify-email", verifyEmail);
 router.post(
   "/request-reset",
   emailValidations,
@@ -34,5 +37,6 @@ router.post(
   handleValidationErrors,
   resetPassword
 );
+router.post("/google", googleAuth);
 
 export default router;

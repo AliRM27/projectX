@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import Back from "../../../assets/svgs/arrowleft.svg";
+import BackArrow from "../../../components/BackArrow";
 import { resetUserPassword } from "../../../services/authApi";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
@@ -33,13 +33,11 @@ const resetPassword = () => {
     } catch (error) {
       console.error("Error resetting password:", error);
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => router.back()} style={{}}>
-        <Back />
-      </Pressable>
+      <BackArrow />
       <View style={{ gap: 20 }}>
         <Text style={styles.heading}>Reset Your Password</Text>
         <Text style={{ color: "grey" }}>Enter your new password below.</Text>

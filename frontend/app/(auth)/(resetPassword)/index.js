@@ -5,12 +5,12 @@ import {
   StyleSheet,
   TouchableOpacity,
   Pressable,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import Back from "../../../assets/svgs/arrowleft.svg";
 import { requestReset } from "../../../services/authApi";
+import BackArrow from "../../../components/BackArrow";
 
 const getEmail = () => {
   const [email, setEmail] = useState("");
@@ -23,7 +23,7 @@ const getEmail = () => {
       if (!res.success) {
         throw new Error(res.message || "Failed to request password reset");
       }
-      router.push({pathname: "/verifyEmail", params: { email }})
+      router.push({ pathname: "/verifyEmail", params: { email } });
     } catch (error) {
       console.error("Error requesting password reset:", error);
     }
@@ -32,12 +32,7 @@ const getEmail = () => {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <Pressable
-        onPress={() => router.back()}
-        style={{ position: "absolute", top: 20, left: 20, zIndex: 1 }}
-      >
-        <Back />
-      </Pressable>
+      <BackArrow />
       <Text style={styles.heading}>Reset Password</Text>
       <TextInput
         style={styles.input}

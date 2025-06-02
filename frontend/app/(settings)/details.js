@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useUser } from "../../context/userContext";
 import React, { useState } from "react";
-import ArrowLeft from "../../assets/svgs/arrowleft.svg";
+import BackArrow from "../../components/BackArrow";
 import { router } from "expo-router";
 import { updateUser } from "../../services/authApi";
 
@@ -47,12 +47,7 @@ const details = () => {
 
   return (
     <View style={styles.container}>
-      <Pressable
-        onPress={() => router.back()}
-        style={{ position: "absolute", top: 20, left: 20 }}
-      >
-        <ArrowLeft />
-      </Pressable>
+      <BackArrow />
       <Text style={styles.heading}>Account Details</Text>
       <View style={styles.section}>
         <Text style={styles.title}>Full Name</Text>

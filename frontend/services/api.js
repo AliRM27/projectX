@@ -29,6 +29,21 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Check if it's an unverified email error
+    if (
+      error.response?.status === 403 &&
+      error.response?.data?.isEmailVerified === false
+    ) {
+      // Handle unverified email case
+      return Promise.reject({
+        ...error,
+        isEmailVerified: false,
+        message: error.response.data.message,
+        email: error.response.data.email,
+      });
+    }
+
+    // Handle token expiration
     if (error.response?.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true; // Prevent infinite loops
 

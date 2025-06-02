@@ -56,7 +56,7 @@ const Shop = ({ item, loading }) => {
     <Pressable
       style={[styles.shop, { opacity: item.products.length === 0 ? 0.6 : 1 }]}
       onPress={() => router.push("../shop/" + item._id)}
-      disabled={item.products.length === 0}
+      // disabled={item.products.length === 0}
     >
       <View
         style={{
@@ -87,7 +87,6 @@ const Shop = ({ item, loading }) => {
           <Like
             width={25}
             height={25}
-            stroke="yellow"
             fill={isShopFavorite ? "rgb(0, 0, 0)" : "transparent"}
           />
         </Pressable>

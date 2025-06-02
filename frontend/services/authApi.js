@@ -31,6 +31,11 @@ export const loginUser = async (userData, setUser) => {
 
     return response.data;
   } catch (error) {
+    // If the error is from our API interceptor with isEmailVerified flag
+    if (error.isEmailVerified === false) {
+      throw error;
+    }
+    // For other errors, throw the message from the response
     throw error.response?.data?.message || "Login failed";
   }
 };
@@ -64,9 +69,9 @@ export const requestReset = async (email) => {
     console.error(error);
     throw error.response?.data?.message || "Request reset failed";
   }
-}
+};
 
-export const verifyOTP = async ({email, otp}) => {
+export const verifyOTP = async ({ email, otp }) => {
   try {
     console.log("Verifying OTP for email:", email, "with OTP:", otp);
     const response = await api.post("auth/verify-otp", { email, otp });
@@ -76,9 +81,12 @@ export const verifyOTP = async ({email, otp}) => {
     throw error.response?.data?.message || "Verify OTP failed";
   }
 };
-export const resetUserPassword = async ({email, newPassword}) => {
+export const resetUserPassword = async ({ email, newPassword }) => {
   try {
-    const response = await api.post("auth/reset-password", { email, newPassword });
+    const response = await api.post("auth/reset-password", {
+      email,
+      newPassword,
+    });
     return response;
   } catch (error) {
     console.error(error);
