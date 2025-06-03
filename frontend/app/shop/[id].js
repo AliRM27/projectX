@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
 import { router, useLocalSearchParams } from "expo-router";
 import BackArrow from "../../components/BackArrow";
 import { useQuery } from "@tanstack/react-query";
@@ -17,6 +16,8 @@ import ProductCard from "../../components/ProductCard";
 import Location from "../../assets/svgs/location.svg";
 import Like from "../../assets/svgs/like.svg";
 import { useFavorites } from "../../context/favoriteContext";
+import Star from "../../assets/svgs/starReview.svg";
+import GradientComponent from "../../colors/gradients";
 
 const shop = () => {
   const { id } = useLocalSearchParams();
@@ -69,85 +70,160 @@ const shop = () => {
           </View>
         </View>
       )}
-      <View
-        style={{
-          width: "100%",
-          padding: 20,
-          flexDirection: "row",
-          gap: 20,
-          alignItems: "center",
-          backgroundColor: "white",
+      <ScrollView
+        contentContainerStyle={{
+          gap: 15,
+          backgroundColor: "rgb(241, 241, 241)",
         }}
       >
-        <Location />
-        <Text style={styles.adress}>
-          {data.location.adress}, {data.location.postalCode}{" "}
-          {data.location.city}, {data.location.country}
-        </Text>
-      </View>
-
-      <View
-        style={{
-          width: "100%",
-          paddingVertical: 20,
-          gap: 20,
-          alignItems: "start",
-          backgroundColor: "white",
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            router.push("shop/bags/" + id);
-          }}
-          style={{ marginLeft: 20 }}
-        >
-          <Text style={{ textDecorationLine: "underline" }}>
-            Mystery bags from this store
-          </Text>
-        </TouchableOpacity>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-          style={{ width: "100%" }}
-          contentContainerStyle={{
+        <View
+          style={{
+            width: "100%",
+            padding: 30,
+            flexDirection: "row",
+            gap: 20,
             alignItems: "center",
-            gap: 30,
-            paddingLeft: 20,
+            jusatifyContent: "center",
+            backgroundColor: "white",
           }}
-          horizontal={true}
         >
-          {isLoading ? (
-            <ProductCard loading={true} />
-          ) : data.products.length === 0 ? (
-            <Text>No Bags Available</Text>
-          ) : (
-            data.products.map((bag, key) => {
-              return (
-                <ProductCard bag={bag} key={key} width={200} height={220} />
-              );
-            })
-          )}
-        </ScrollView>
-      </View>
-      <View
-        style={{
-          width: "100%",
-          backgroundColor: "white",
-          paddingHorizontal: 20,
-          paddingBottom: 20,
-          gap: 10,
-        }}
-      >
-        <Text style={{ fontSize: 17, marginVertical: 20 }}>More info</Text>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={{ fontWeight: "bold" }}>Website: </Text>
-          <Text>https://lotuz.com</Text>
+          <Location />
+          <Text style={styles.adress}>
+            {data.location.adress}, {data.location.postalCode}{" "}
+            {data.location.city}, {data.location.country}
+          </Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
-          <Text style={{ fontWeight: "bold" }}>ID: </Text>
-          <Text>3486511290</Text>
+
+        <View
+          style={{
+            width: "100%",
+            paddingVertical: 20,
+            gap: 20,
+            alignItems: "start",
+            backgroundColor: "white",
+          }}
+        >
+          <TouchableOpacity
+            onPressIn={() => {}}
+            onPress={() => {
+              router.push("shop/bags/" + id);
+            }}
+            style={{
+              marginLeft: 10,
+              width: "30%",
+              display: data.products.length === 0 ? "none" : "flex",
+            }}
+          >
+            <Text
+              style={{
+                textAlign: "center",
+                color: "black",
+                fontSize: 16,
+                fontWeight: "500",
+              }}
+            >
+              View all -{">"}
+            </Text>
+          </TouchableOpacity>
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            style={{}}
+            contentContainerStyle={{
+              alignItems: "center",
+              gap: 30,
+              paddingLeft: 20,
+            }}
+            horizontal={true}
+          >
+            {isLoading ? (
+              <ProductCard loading={true} />
+            ) : data.products.length === 0 ? (
+              <Text style={{ fontSize: 20 }}>No Bags Available</Text>
+            ) : (
+              data.products.slice(0, 3).map((bag, key) => {
+                return (
+                  <ProductCard bag={bag} key={key} width={200} height={220} />
+                );
+              })
+            )}
+          </ScrollView>
         </View>
-      </View>
+        <View
+          style={{
+            width: "100%",
+            backgroundColor: "white",
+            flexDirection: "row",
+
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              alignItems: "center",
+              gap: 10,
+              flex: 1,
+              borderRightWidth: 1,
+              borderRightColor: "#ccc",
+              padding: 20,
+            }}
+          >
+            <Text style={{ fontSize: 17 }}>Rating</Text>
+            <View
+              style={{
+                padding: 15,
+                borderRadius: 15,
+                backgroundColor: "rgb(239, 239, 239)",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+              }}
+            >
+              <Star width={20} height={20} />
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "600",
+                }}
+              >
+                {data.rating}
+              </Text>
+            </View>
+          </View>
+          <View style={{ flex: 1, paddingHorizontal: 20 }}>
+            <GradientComponent>
+              <Text
+                style={{
+                  color: "rgb(227, 227, 227)",
+                  fontSize: 16,
+                  fontWeight: "500",
+                }}
+              >
+                Give a Review
+              </Text>
+            </GradientComponent>
+          </View>
+        </View>
+        <View
+          style={{
+            width: "100%",
+            backgroundColor: "white",
+            paddingHorizontal: 20,
+            paddingBottom: 20,
+            gap: 10,
+          }}
+        >
+          <Text style={{ fontSize: 17, marginVertical: 20 }}>More info</Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ fontWeight: "bold" }}>Website: </Text>
+            <Text>https://lotuz.com</Text>
+          </View>
+          <View style={{ flexDirection: "row" }}>
+            <Text style={{ fontWeight: "bold" }}>ID: </Text>
+            <Text>3486511290</Text>
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -156,8 +232,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    gap: 15,
-    backgroundColor: "rgb(248, 248, 248)",
   },
   image: {
     width: 80,
@@ -182,6 +256,8 @@ const styles = StyleSheet.create({
     gap: 10,
     backgroundColor: "white",
     padding: 20,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
   },
   imageContainer: {
     width: 80,
