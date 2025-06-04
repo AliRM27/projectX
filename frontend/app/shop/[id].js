@@ -75,6 +75,7 @@ const shop = () => {
           gap: 15,
           backgroundColor: "rgb(241, 241, 241)",
         }}
+        style={{ width: "100%" }}
       >
         <View
           style={{
@@ -194,7 +195,7 @@ const shop = () => {
             <GradientComponent>
               <Text
                 style={{
-                  color: "rgb(227, 227, 227)",
+                  color: "rgb(255, 255, 255)",
                   fontSize: 16,
                   fontWeight: "500",
                 }}

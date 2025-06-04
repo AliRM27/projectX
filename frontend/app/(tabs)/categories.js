@@ -34,6 +34,7 @@ const categories = () => {
   const [range, setRange] = useState([0, 100]);
   const [sliderWidth, setSliderWidth] = useState(0);
   const { categories } = useCategories();
+  const [isFocused, setIsFocused] = useState(false);
 
   const { data, isLoading, error, isFetching, refetch } = useQuery({
     queryKey: ["shops", searchQuery],
@@ -87,10 +88,12 @@ const categories = () => {
         }}
       >
         <TextInput
-          style={styles.searchBar}
+          style={[styles.searchBar, isFocused && styles.focusedSearchBar]}
           placeholder="Search for shops..."
           value={searchQuery}
           onChangeText={setSearchQuery}
+          onFocus={setIsFocused}
+          onBlur={() => setIsFocused((p) => !p)}
         />
         <TouchableOpacity
           onPress={() => {
@@ -384,6 +387,9 @@ const styles = StyleSheet.create({
     color: "black",
     textAlign: "center",
     width: 45,
+  },
+  focusedSearchBar: {
+    borderColor: "black",
   },
 });
 
