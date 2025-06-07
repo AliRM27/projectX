@@ -4,6 +4,7 @@ import {
   Pressable,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
@@ -47,7 +48,7 @@ const verifyEmail = () => {
         disabled={loading}
       >
         {loading ? (
-          <Text style={styles.buttonText}>Verifying...</Text>
+          <ActivityIndicator color={"white"} />
         ) : (
           <Text style={styles.buttonText}>Next</Text>
         )}

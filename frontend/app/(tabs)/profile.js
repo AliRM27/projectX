@@ -44,7 +44,7 @@ export default function profile() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator />
       </View>
     );
   }

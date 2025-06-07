@@ -9,6 +9,7 @@
     "icon": "./assets/icons/ios-dark.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
       "icon": {
@@ -55,6 +56,13 @@
             "image": "./assets/icons/splash-icon-light.png",
             "backgroundColor": "#000000"
           }
+        }
+      ],
+      [
+        "expo-maps",
+        {
+          "requestLocationPermission": false,
+          "locationPermsission": "Allow Lotuz to access your location"
         }
       ]
     ],

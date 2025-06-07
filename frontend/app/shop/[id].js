@@ -7,6 +7,7 @@ import {
   Pressable,
   ActivityIndicator,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import BackArrow from "../../components/BackArrow";
@@ -18,6 +19,7 @@ import Like from "../../assets/svgs/like.svg";
 import { useFavorites } from "../../context/favoriteContext";
 import Star from "../../assets/svgs/starReview.svg";
 import GradientComponent from "../../colors/gradients";
+// import { AppleMaps } from "expo-maps";
 
 const shop = () => {
   const { id } = useLocalSearchParams();
@@ -205,6 +207,9 @@ const shop = () => {
             </GradientComponent>
           </View>
         </View>
+        {/* <View>
+          <AppleMaps.View />
+        </View> */}
         <View
           style={{
             width: "100%",

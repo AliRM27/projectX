@@ -5,6 +5,7 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { useFavorites } from "../../context/favoriteContext";
@@ -52,8 +53,8 @@ const favorites = () => {
 
   if (isLoading) {
     return (
-      <View>
-        <Text>Loading...</Text>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator />
       </View>
     );
   }
@@ -75,7 +76,11 @@ const favorites = () => {
       >
         Your Favorites:
       </Text>
-      <ScrollView style={{ marginTop: 30 }} contentContainerStyle={{alignItems:"center", paddingBottom:30}} showsVerticalScrollIndicator={false} >
+      <ScrollView
+        style={{ marginTop: 30 }}
+        contentContainerStyle={{ alignItems: "center", paddingBottom: 30 }}
+        showsVerticalScrollIndicator={false}
+      >
         {favoriteShops.map((shop, key) => (
           <Shop key={key} item={shop} />
         ))}

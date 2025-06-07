@@ -105,8 +105,13 @@ const categories = () => {
           <Filter width={27} height={27} />
         </TouchableOpacity>
       </View>
-      {/* Loading Indicator */}
-      {isLoading && <></>}
+      {isLoading && (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <ActivityIndicator />
+        </View>
+      )}
 
       {/* Error Handling */}
       {error && <Text style={styles.errorText}>Error fetching shops</Text>}
