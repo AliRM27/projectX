@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import { StatusBar } from "react-native";
+import { StatusBar, Platform } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import * as SplashScreen from "expo-splash-screen";
 import { FavoritesProvider } from "../context/favoriteContext";
@@ -25,12 +25,13 @@ const queryClient = new QueryClient({
 export default function _layout() {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-        <StatusBar
-          translucent
-          backgroundColor="transparent"
-          barStyle="dark-content"
-        />
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "white",
+        }}
+      >
+        <StatusBar barStyle="dark-content" />
         <QueryClientProvider client={queryClient}>
           {/* <GlobalDataLoader /> */}
           <UserProvider>
