@@ -19,7 +19,7 @@ import Like from "../../assets/svgs/like.svg";
 import { useFavorites } from "../../context/favoriteContext";
 import Star from "../../assets/svgs/starReview.svg";
 import GradientComponent from "../../colors/gradients";
-import { GoogleMaps } from "expo-maps";
+import "expo-maps";
 
 const shop = () => {
   const { id } = useLocalSearchParams();
@@ -229,7 +229,7 @@ const shop = () => {
           </View>
         </View>
         <View>
-          <GoogleMaps.View style={{flex: 1}}/>
+          <GoogleMaps.View style={{ flex: 1 }} />
         </View>
         <View
           style={{

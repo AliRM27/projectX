@@ -49,7 +49,7 @@ export default function _layout() {
                   <Stack.Screen name="(auth)/login" />
                   <Stack.Screen name="welcome" />
                   <Stack.Screen name="product/[id]" />
-                  <Stack.Screen name="shop/[id]" />
+                  {/* <Stack.Screen name="shop/[id]" /> */}
                 </Stack>
               </FavoritesProvider>
             </CategoreisProvider>

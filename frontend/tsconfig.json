@@ -1,0 +1,8 @@
+{
+  "extends": "expo/tsconfig.base", // <- easiest: inherits Expo defaults
+  "compilerOptions": {
+    // if you don’t want to extend the Expo base, at least set:
+    // "jsx": "react-native"
+    // (optional) keep strict mode if you like
+  }
+}
