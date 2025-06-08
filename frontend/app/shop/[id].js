@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Platform,
+  Linking,
 } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import BackArrow from "../../components/BackArrow";
@@ -19,7 +20,6 @@ import Like from "../../assets/svgs/like.svg";
 import { useFavorites } from "../../context/favoriteContext";
 import Star from "../../assets/svgs/starReview.svg";
 import GradientComponent from "../../colors/gradients";
-import "expo-maps";
 
 const shop = () => {
   const { id } = useLocalSearchParams();
@@ -44,6 +44,18 @@ const shop = () => {
   if (isLoading) {
     return <ActivityIndicator />;
   }
+
+  const openInMaps = (address) => {
+    const encodedAddress = encodeURIComponent(address);
+    const url =
+      Platform.OS === "ios"
+        ? `http://maps.apple.com/?q=${encodedAddress}`
+        : `geo:0,0?q=${encodedAddress}`;
+
+    Linking.openURL(url).catch((err) =>
+      console.error("Error opening map", err)
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -79,7 +91,7 @@ const shop = () => {
         }}
         style={{ width: "100%" }}
       >
-        <View
+        <TouchableOpacity
           style={{
             width: "100%",
             padding: 30,
@@ -89,13 +101,18 @@ const shop = () => {
             jusatifyContent: "center",
             backgroundColor: "white",
           }}
+          onPress={() =>
+            openInMaps(
+              `${data.location.adress}, ${data.location.postalCode} ${data.location.city}, ${data.location.country}`
+            )
+          }
         >
           <Location />
           <Text style={styles.adress}>
             {data.location.adress}, {data.location.postalCode}{" "}
-            {data.location.city}, {data.location.country}
+            {data.location.city}
           </Text>
-        </View>
+        </TouchableOpacity>
 
         <View
           style={{
@@ -228,9 +245,6 @@ const shop = () => {
             )}
           </View>
         </View>
-        <View>
-          <GoogleMaps.View style={{ flex: 1 }} />
-        </View>
         <View
           style={{
             width: "100%",
@@ -296,6 +310,7 @@ const styles = StyleSheet.create({
   },
   adress: {
     color: "black",
+    fontSize: 16,
   },
   like: {
     position: "absolute",

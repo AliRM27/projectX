@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { fetchHome, fetchCategories } from "../../services/api.js";
@@ -12,6 +13,9 @@ import Category from "../../components/Category.jsx";
 import Section from "../../components/Section.jsx";
 import { sampleData } from "../../utils/samlpeDatas.js";
 import { useCategories } from "../../context/categoriesContext.js";
+import { useUserLocation } from "../../context/UserLocationContext.js";
+import { useRequestLocation } from "../../hooks/useRequestLocation.js";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function index() {
   const [queries, setQuery] = useState(["all"]);
@@ -51,6 +55,9 @@ export default function index() {
     });
   };
 
+  const { location, setLocationState } = useUserLocation();
+  const { requestAndSetLocation } = useRequestLocation();
+
   if (error) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -62,12 +69,33 @@ export default function index() {
   return (
     <View style={{ flex: 1 }}>
       <View
-        style={
-          (styles.container,
-          { marginTop: 25, marginLeft: 25, marginBottom: 35 })
-        }
+        style={{
+          marginTop: 25,
+          marginBottom: 35,
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
       >
         <Text style={styles.heading}>SnapShop</Text>
+        {location ? (
+          <Text
+            numberOfLines={2}
+            style={{ textAlign: "center" }}
+            onPress={async () => {
+              await AsyncStorage.removeItem("user_location");
+              setLocationState(null);
+            }}
+          >
+            Your location {location.latitdue} {location.longitude}
+          </Text>
+        ) : (
+          <TouchableOpacity onPress={requestAndSetLocation}>
+            <Text style={{ textDecorationLine: "underline" }}>
+              Find Shops Near Me
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <ScrollView
         style={isLoading ? { backgroundColor: "transparent" } : {}}

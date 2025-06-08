@@ -25,11 +25,6 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.lotuz.frontend",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyD_CK7jBT5Wwj9UnD1xLr1j7t5zlol4NeE"
-        }
-      },
       "intentFilters": [
         {
           "action": "VIEW",
