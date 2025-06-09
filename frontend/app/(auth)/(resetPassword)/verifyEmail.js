@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Pressable,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -10,7 +9,6 @@ import React, { useState } from "react";
 import { router } from "expo-router";
 import OtpInput from "../../../components/OtpInput";
 import { verifyOTP } from "../../../services/authApi";
-import { useSearchParams } from "expo-router/build/hooks";
 import { useLocalSearchParams } from "expo-router/build/hooks";
 import BackArrow from "../../../components/BackArrow";
 
@@ -36,7 +34,9 @@ const verifyEmail = () => {
       <BackArrow />
       <View style={{ gap: 20 }}>
         <Text style={styles.heading}>VerifyEmail</Text>
-        <Text style={{ color: "grey" }}>Code has been sent to your email.</Text>
+        <Text style={{ color: "grey", textAlign: "center" }}>
+          Code has been sent to your email.
+        </Text>
       </View>
       <OtpInput onOtpChange={setOtp} />
       <TouchableOpacity
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: "bold",
+    textAlign: "center",
   },
   input: {
     height: 50,

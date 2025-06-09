@@ -11,10 +11,8 @@ export const getAllProducts = async (req, res) => {
       products = await Product.find();
     } else {
       products = await Product.find({ shopId });
-      let name = await Shop.findById(shopId);
-      products.push(name.name);
     }
-    
+
     res.status(200).json(products);
   } catch (error) {
     console.log(error);
@@ -25,7 +23,7 @@ export const getAllProducts = async (req, res) => {
 // Get product details
 export const getProductDetails = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("shopId");
     if (!product) return res.status(404).json({ message: "Product not found" });
     res.status(200).json(product);
   } catch (error) {

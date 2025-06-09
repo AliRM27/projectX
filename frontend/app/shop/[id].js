@@ -95,7 +95,6 @@ const shop = () => {
           style={{
             width: "100%",
             padding: 30,
-            flexDirection: "row",
             gap: 20,
             alignItems: "center",
             jusatifyContent: "center",
@@ -107,10 +106,22 @@ const shop = () => {
             )
           }
         >
-          <Location />
-          <Text style={styles.adress}>
-            {data.location.adress}, {data.location.postalCode}{" "}
-            {data.location.city}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 20,
+              width: "100%",
+            }}
+          >
+            <Location />
+            <Text style={styles.adress}>
+              {data.location.adress}, {data.location.postalCode}{" "}
+              {data.location.city}
+            </Text>
+          </View>
+          <Text style={{ color: "grey", alignSelf: "flex-start" }}>
+            Open in Maps
           </Text>
         </TouchableOpacity>
 
@@ -173,7 +184,6 @@ const shop = () => {
             width: "100%",
             backgroundColor: "white",
             flexDirection: "row",
-
             alignItems: "center",
           }}
         >
@@ -182,8 +192,7 @@ const shop = () => {
               alignItems: "center",
               gap: 10,
               flex: 1,
-              borderRightWidth: 1,
-              borderRightColor: "#ccc",
+
               padding: 20,
             }}
           >
@@ -210,7 +219,15 @@ const shop = () => {
               </Text>
             </View>
           </View>
-          <View style={{ flex: 1, paddingHorizontal: 20 }}>
+          <View
+            style={{
+              flex: 1,
+              padding: 20,
+              borderLeftWidth: 1,
+              borderLeftColor: "#ccc",
+              alignItems: "center",
+            }}
+          >
             {Platform.OS === "ios" ? (
               <GradientComponent>
                 <Text
